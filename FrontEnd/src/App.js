@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import "bootstrap/dist/js/bootstrap.js";
+
 import logo from "./logo.svg";
+import LogInC from "./Components/LogInC";
 import "./App.css";
 
 function App() {
@@ -17,11 +20,19 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="App-title">Welocm to react</h1>
-      </header>
-      <p className="App-intro">{apiResponse}</p>
+    <div
+      style={{ marginTop: 40, height: "100vh" }}
+      className="d-flex flex-row justify-content-center align-items-stretch"
+    >
+      <div
+        style={{ width: "600px" }}
+        className="d-flex flex-column justify-content-center "
+      >
+        <p>Welcome to Tira Academics</p>
+      </div>
+      <div className="d-flex flex-column justify-content-center ">
+        <LogInC />
+      </div>
     </div>
   );
 }
