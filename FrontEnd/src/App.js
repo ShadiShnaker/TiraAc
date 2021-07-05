@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import "./Components/bootstrap.min.css"
-//import "bootstrap/dist/js/bootstrap.js";
-import IMG from "./Images/IMG1.jpg";
+import { BrowserRouter, Link, Route, Switch, Redirect} from 'react-router-dom';
+import "./Styles/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.js";
+
 import BG from "./Images/bg.jpg"
+import Events from "./Components/Events"
+import Home from "./Components/Home"
+import LogIn from "./Components/LogIn"
+const axios = require('axios').default;
 
 
 
 function App() {
     const [apiResponse, setApiResponse] = useState("");
+
+    const [activePage, setActivePage] = useState(window.location.pathname);
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const callAPI = () => {
         fetch("http://localhost:9000/testAPI")
@@ -18,41 +27,76 @@ function App() {
 
     useEffect(() => {
         callAPI();
+        console.log(" current state is " + activePage);
     }, []);
 
+    const isCurrentActivePage = (page) => {
+      console.log(" current page is " + page);
+      if (activePage === page){
+        return "rgb(255,255,255)";
+      } else {
+        return "rgb(114,168,231)";
+      }
+
+    }
+
+    const changeActivePage = (page) => {
+      console.log("page is " + page);
+      setActivePage(page)
+    }
+
+    const submitLogin = async (pass, email) =>{
+      try{
+      const res = await axios.post('http://localhost:9000/login', { password: pass, email: email });
+      }
+      catch (error) {
+
+      }
+      console.log("pass is " + pass + "email is " + email);
+
+    }
+
+    const getHeight = (page) => {
+      if (page === "/events")
+        return "none";
+      else
+        return "100%";
+    }
+
     return (
-      <body style={{background: 'linear-gradient(rgba(48,48,48,0.65), rgba(48,48,48,0.65)), url('+BG+')', height: "100%", borderStyle: "none"}}>
-        <h1 className="text-center text-white d-none d-lg-block site-heading" style={{marginTop: '0px', paddingTop: '80px'}}><span className="site-heading-upper mb-3" style={{color: 'rgb(47,123,211)', marginTop: '0px'}}>Welcome to&nbsp;</span><span className="site-heading-lower">Tira academics</span></h1>
-        <nav className="navbar navbar-dark navbar-expand-lg py-lg-4" id="mainNav" style={{background: 'var(--bs-gray-dark)'}}>
+     
+      <body style={{height: "100%"}}>
+        <BrowserRouter>
+        <nav className="navbar navbar-dark navbar-expand-lg fixed-top py-lg-4" id="mainNav" style={{background: 'linear-gradient(90deg, rgba(52,58,64,0.2) 0%, var(--bs-gray-dark) 50%, rgba(52,58,64,0.2)), rgba(52,58,64,0)', color: 'var(--bs-gray-dark)'}}>
           <div className="container"><a className="navbar-brand text-uppercase d-lg-none text-expanded" href="#" style={{color: 'rgb(47,123,211)'}}>Tira Academics</a><button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navbarResponsive"><span className="visually-hidden">Toggle navigation</span><span className="navbar-toggler-icon" /></button>
             <div className="collapse navbar-collapse" id="navbarResponsive">
               <ul className="navbar-nav mx-auto">
-                <li className="nav-item"><a className="nav-link" href="index.html" style={{color: 'rgb(114,168,231)'}}>Home</a></li>
-                <li className="nav-item"><a className="nav-link" href="#" style={{color: 'rgb(114,168,231)'}}>Events</a></li>
-                <li className="nav-item"><a className="nav-link" href="about.html" style={{color: 'rgb(114,168,231)'}}>Archive</a></li>
-                <li className="nav-item"><a className="nav-link" href="#" style={{color: 'rgb(114,168,231)'}}>About us</a></li>
-                <li className="nav-item"><a className="nav-link" href="#" style={{color: 'rgb(114,168,231)'}}>member login</a></li>
+                <li className="nav-item"><Link to="/index" onClick={() => changeActivePage("/index")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/index")}}>Home</a></Link></li>
+                <li className="nav-item"><Link to="/events" onClick={() => changeActivePage("/events")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/events")}}>Events</a></Link></li>
+                <li className="nav-item"><Link to="about.html" style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: 'rgb(114,168,231)'}}>Archive</a></Link></li>
+                <li className="nav-item"><Link to="#" style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: 'rgb(114,168,231)'}}>About us</a></Link></li>
+                <li className="nav-item"><Link to="/login" onClick={() => changeActivePage("/login")}  style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/login")}}>member login</a></Link></li>
               </ul>
             </div>
           </div>
         </nav>
-        <section className="page-section clearfix">
-          <div className="container">
-            <div className="intro"><img className="img-fluid intro-img mb-3 mb-lg-0 rounded" src={IMG} />
-              <div className="text-center intro-text p-5 rounded bg-faded">
-                <h2 className="section-heading mb-4"><span className="section-heading-upper">Welcome to</span><span className="section-heading-lower">Tira<br />Academics</span></h2>
-                <p className="mb-3">description about our organization...<br /><br /><br /><br /><br /></p>
-                <div className="mx-auto intro-button"><a className="btn btn-primary d-inline-block mx-auto btn-xl" role="button" href="#" style={{background: 'rgb(47,123,211)', borderStyle: 'none', borderColor: 'rgba(13,110,253,0)'}}>View upcoming events!</a></div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <footer className="text-center footer text-faded py-5" style={{background: 'rgba(47,123,211,0.62)'}}>
-          <div className="container">
-            <p className="m-0 small">Copyright&nbsp;©&nbsp;Tira Academics 2021</p>
-          </div>
-        </footer>
+        <Switch>
+        <Route path="/index">
+            <Home/>
+          </Route>
+          <Route path="/events">
+            <Events/>
+          </Route>
+          <Route path="/login">
+            <LogIn submitLogIn={submitLogin}/>
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/index" />
+          </Route>
+        </Switch>
+        </BrowserRouter>
       </body>
+      
     );
 }
 
