@@ -17,7 +17,7 @@ export default function Home(props) {
             >
                 <span
                     className="site-heading-upper mb-3"
-                    style={{ color: "rgb(47,123,211)", marginTop: "0px" }}
+                    style={{ color: "rgb(47,123,211)", marginTop: "40px" }}
                 >
                     Welcome to&nbsp;
                 </span>
