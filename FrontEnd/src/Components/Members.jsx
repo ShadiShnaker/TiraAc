@@ -1,42 +1,65 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
-import MeetingItem from "../Components/MeetingItem";
+import MemberItem from "../Components/MemberItem";
+import BG from "../Images/bg.jpg";
 const axios = require("axios").default;
 
-export default function Meetings(props) {
-    const [isAddMeetingOpen, SetIsAddMeetingOpen] = useState(false);
-    const [meetingType, setMeetingType] = useState("managers");
+export default function Members(props) {
+    const [isAddMemberOpen, SetIsAddMemberOpen] = useState(false);
+    const [memberType, setMemberType] = useState("volunteer");
 
     const [name, setName] = useState("");
+    const [id, setId] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [date, setDate] = useState("");
-    const [coordinator, setCoordinator] = useState("");
 
     const handleChangeName = (event) => {
         setName(event.target.value);
     };
 
-    const handleChangeCoordinator = (event) => {
-        setCoordinator(event.target.value);
+    const handleChangeId = (event) => {
+        setId(event.target.value);
+    };
+
+    const handleChangePhone = (event) => {
+        setPhone(event.target.value);
+    };
+
+    const handleChangeEmail = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handleChangePassword = (event) => {
+        setPassword(event.target.value);
     };
 
     const handleChangeDate = (event) => {
         setDate(event.target.value);
     };
 
-    const createNewMeeting = async () => {
+    const AddNewMember = async () => {
         try {
             if (
                 name !== "" &&
+                id !== "" &&
+                phone !== "" &&
+                email !== "" &&
+                password !== "" &&
                 date !== ""
             ) {
                 const res = await axios.post(
-                    "http://localhost:9000/createMeeting",
+                    "http://localhost:9000/createMember",
                     {
                         name: name,
-                        coordinator: coordinator,
+                        id: id,
+                        phone: phone,
+                        email: email,
+                        password: password,
                         date: date,
-                        meetingType: meetingType
+                        memberType: memberType
                     }
                 );
             }
@@ -47,14 +70,14 @@ export default function Meetings(props) {
     };
 
 
-    const getAddMeeting = () => {
-        if (isAddMeetingOpen) {
+    const getAddMember = () => {
+        if (isAddMemberOpen) {
             return (
                 <section
                     className="contact-clean"
                     style={{
                         background: "rgba(241,247,252,0)",
-                        height: "400px",
+                        height: "580px",
                         paddingTop: "20px",
                     }}
                 >
@@ -71,7 +94,7 @@ export default function Meetings(props) {
                             className="text-center"
                             style={{ color: "rgb(255,255,255)" }}
                         >
-                            Create a New Meeting
+                            Add a New Member
                         </h2>
                         <div className="mb-3">
                             <input
@@ -85,8 +108,41 @@ export default function Meetings(props) {
                                 className="form-control"
                                 type="text"
                                 name="Event Coordinator"
-                                placeholder="Meeting Coordinator"
-                                onChange={(event) => handleChangeCoordinator(event)}
+                                placeholder="ID"
+                                onChange={(event) => handleChangeId(event)}
+                                style={{
+                                    marginTop: "10px",
+                                    color: "rgb(80, 94, 108)",
+                                }}
+                            />
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="Event Coordinator"
+                                placeholder="Phone"
+                                onChange={(event) => handleChangePhone(event)}
+                                style={{
+                                    marginTop: "10px",
+                                    color: "rgb(80, 94, 108)",
+                                }}
+                            />
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="Event Coordinator"
+                                placeholder="Email"
+                                onChange={(event) => handleChangeEmail(event)}
+                                style={{
+                                    marginTop: "10px",
+                                    color: "rgb(80, 94, 108)",
+                                }}
+                            />
+                            <input
+                                className="form-control"
+                                type="password"
+                                name="Event Coordinator"
+                                placeholder="Initial Password"
+                                onChange={(event) => handleChangePassword(event)}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -103,6 +159,7 @@ export default function Meetings(props) {
                                 }}
                             />
                         </div>
+
                         <div
                             className="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center justify-content-xxl-center mb-3"
                             style={{ marginBottom: "0px", height: "60px" }}
@@ -128,21 +185,21 @@ export default function Meetings(props) {
                                         paddingLeft: "5px",
                                     }}
                                 >
-                                   {getMeetingType()}{" "}
+                                   {getMemberType()}{" "}
                                 </button>
                                 <div className="dropdown-menu">
-                                    <a className="dropdown-item" onClick={() => changeMeetingType("managers")} href="#">
-                                        Managers Only
+                                    <a className="dropdown-item" onClick={() => changeMemberType("volunteer")} href="#">
+                                        Volunteer
                                     </a>
-                                    <a className="dropdown-item" onClick={() => changeMeetingType("managersAndVolunteers")} href="#">
-                                        Managers + Volunteers
+                                    <a className="dropdown-item" onClick={() => changeMemberType("manager")} href="#">
+                                        Manager
                                     </a>
                                 </div>
                             </div>
                             <button
                                 className="btn"
                                 type="button"
-                                onClick={() => createNewMeeting()}
+                                onClick={() => AddNewMember()}
                                 style={{
                                     marginRight: "0px",
                                     marginLeft: "10px",
@@ -151,7 +208,7 @@ export default function Meetings(props) {
                                     height: "60px",
                                 }}
                             >
-                                Create Meeting
+                                Add New Member
                             </button>
                         </div>
                     </form>
@@ -160,33 +217,32 @@ export default function Meetings(props) {
         }
     };
 
-    const changeAddMeetingVisibility = () => {
-        SetIsAddMeetingOpen(!isAddMeetingOpen);
+    const changeAddMemberVisibility = () => {
+        SetIsAddMemberOpen(!isAddMemberOpen);
     };
 
-    const getMeetingType = () => {
-        if (meetingType === "managers"){
-            return "Managers Only";
+    const getMemberType = () => {
+        if (memberType === "volunteer"){
+            return "Volunteer";
         } else {
-            return "Managers + Volunteers";
+            return "Manager";
         }
     }
 
     const getButtonTitle = () => {
-        if (isAddMeetingOpen) {
+        if (isAddMemberOpen) {
             return "HIDE";
         } else {
-            return "ADD A NEW MEETING";
+            return "ADD A NEW MEMBER";
         }
     };
 
-    const changeMeetingType = (type) =>{
-        setMeetingType(type);
+    const changeMemberType = (type) =>{
+        setMemberType(type);
     }
 
     return (
-        <div
-        style={{
+        <div style={{
             overflowX: "hidden",
             overflowY: "auto",
             height: "100%",
@@ -201,7 +257,7 @@ export default function Meetings(props) {
             >
                 <button
                     className="btn"
-                    onClick={() => changeAddMeetingVisibility()}
+                    onClick={() => changeAddMemberVisibility()}
                     type="button"
                     style={{
                         marginRight: "0px",
@@ -215,19 +271,16 @@ export default function Meetings(props) {
                     {getButtonTitle()}
                 </button>
 
-                {getAddMeeting()}
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
+                {getAddMember()}
+                <MemberItem />
+                <MemberItem />
+                <MemberItem />
+                <MemberItem />
+                <MemberItem />
+                <MemberItem />
                 
             </section>
         </div>
     );
 }
+

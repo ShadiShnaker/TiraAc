@@ -2,16 +2,15 @@ import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/events_button.css";
 import IMG from "../Images/IMG1.jpg";
-import BG from "../Images/bg.jpg"
 
 export default function Home(props) {
     return (
-        <div style={{background: 'linear-gradient(rgba(48,48,48,0.65), rgba(48,48,48,0.65)), url('+BG+') top / cover', backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", height: "100%", borderStyle: "none"}}>
+        <div >
             <h1
                 className="text-center text-white d-none d-lg-block site-heading"
                 style={{
                     marginTop: "0px",
-                    paddingTop: "120px",
+                    paddingTop: "10px",
                     marginBottom: "40px",
                 }}
             >

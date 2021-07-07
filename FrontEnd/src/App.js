@@ -9,6 +9,8 @@ import Home from "./Components/Home"
 import LogIn from "./Components/LogIn"
 import AddEvents from "./Components/AddEvents"
 import Meetings from "./Components/Meetings"
+import Members from "./Components/Members"
+import Mailing from "./Components/Mailing"
 const axios = require('axios').default;
 
 
@@ -18,9 +20,11 @@ function App() {
 
     const [activePage, setActivePage] = useState(window.location.pathname);
 
-    const [activeSubPage, setActiveSubPage] = useState("/meetings");
+    const [activeSubPage, setActiveSubPage] = useState(window.location.pathname);
 
     const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    const [isManager, setIsManager] = useState(true);
 
     const callAPI = () => {
         fetch("http://localhost:9000/testAPI")
@@ -32,6 +36,10 @@ function App() {
     useEffect(() => {
         callAPI();
         console.log(" current state is " + activePage);
+        const pathname = window.location.pathname;
+        if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing"){
+          setActivePage("/member");
+        }
     }, []);
 
     const isCurrentActivePage = (page) => {
@@ -82,7 +90,7 @@ function App() {
 
     const getLoggedInNavBar = () => {
       const pathname = window.location.pathname;
-      if (isLoggedIn && (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member")){
+      if (isLoggedIn && isManager && (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing")){
         return(
           <nav className="navbar navbar-dark navbar-expand fixed-top py-lg-4" id="mainNav" style={{background: 'linear-gradient(90deg, rgba(52,58,64,0.7) 0%, rgb(97,97,97) 50%, rgba(52,58,64,0.7)), rgba(52,58,64,0)', color: 'var(--bs-gray-dark)', marginTop: '85px', height: '34px'}}>
         <div className="container"><button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navbarResponsive"><span className="visually-hidden">Toggle navigation</span><span className="navbar-toggler-icon" /></button>
@@ -90,8 +98,8 @@ function App() {
             <ul className="navbar-nav mx-auto">
             <li className="nav-item"><Link to="/addEvent" onClick={() => changeActiveSubPage("/addEvent")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/addEvent")}}>Add Event</a></Link></li>
             <li className="nav-item"><Link to="/meetings" onClick={() => changeActiveSubPage("/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/meetings")}}>Meetings</a></Link></li>
-              <li className="nav-item"><a className="nav-link" href="about.html" style={{color: 'rgb(114,168,231)'}}>Members</a></li>
-              <li className="nav-item"><a className="nav-link" href="#" style={{color: 'rgb(114,168,231)'}}>Mailing</a></li>
+            <li className="nav-item"><Link to="/members" onClick={() => changeActiveSubPage("/members")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/members")}}>Members</a></Link></li>
+            <li className="nav-item"><Link to="/mailing" onClick={() => changeActiveSubPage("/mailing")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/mailing")}}>Mailing</a></Link></li>
             </ul>
           </div>
         </div>
@@ -101,16 +109,26 @@ function App() {
     }
 
     const getSignInMemberLink = () => {
-      if (isLoggedIn){
+      if (isLoggedIn && isManager){
         return(
           <li className="nav-item"><Link to="/member" onClick={() => changeAllActivePages("/member", "/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/member")}}>Member Page</a></Link></li>
         );
       }
+      else if (isLoggedIn){
+        return (
+          <li className="nav-item"><Link to="/meetings" onClick={() => changeActivePage("/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/meetings")}}>Meetings</a></Link></li>
+        );
+      }
+    }
+
+    const logout = () => {
+      setIsLoggedIn(false);
+      changeActivePage("/login");
     }
 
     return (
      
-      <body style={{height: "100%"}}>
+      <body style={{background: 'linear-gradient(rgba(48,48,48,0.65), rgba(48,48,48,0.65)), url('+BG+') top / cover', backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", height: "100%", borderStyle: "none", paddingTop: "120px"}}>
         <BrowserRouter>
         {getLoggedInNavBar()}
         <nav className="navbar navbar-dark navbar-expand-lg fixed-top py-lg-4" id="mainNav" style={{background: 'linear-gradient(90deg, rgba(52,58,64,0.2) 0%, var(--bs-gray-dark) 50%, rgba(52,58,64,0.2)), rgba(52,58,64,0)', color: 'var(--bs-gray-dark)'}}>
@@ -122,7 +140,8 @@ function App() {
                 <li className="nav-item"><Link to="about.html" style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: 'rgb(114,168,231)'}}>Archive</a></Link></li>
                 <li className="nav-item"><Link to="#" style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: 'rgb(114,168,231)'}}>About us</a></Link></li>
                 {getSignInMemberLink()}
-                <li className="nav-item"><Link to="/login" onClick={() => changeActivePage("/login")}  style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/login")}}>member login</a></Link></li>
+                {isLoggedIn ? <li className="nav-item"><Link to="/login" onClick={() => logout()}  style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/login")}}>log out</a></Link></li> : <li className="nav-item"><Link to="/login" onClick={() => changeActivePage("/login")}  style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/login")}}>member login</a></Link></li>}
+                {/* <li className="nav-item"><Link to="/login" onClick={() => changeActivePage("/login")}  style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/login")}}>member login</a></Link></li> */}
               </ul>
             </div>
           </div>
@@ -142,6 +161,12 @@ function App() {
           </Route>
           <Route path="/meetings">
             <Meetings/>
+          </Route>
+          <Route path="/members">
+            <Members/>
+          </Route>
+          <Route path="/mailing">
+            <Mailing/>
           </Route>
           <Route path="/login">
             <LogIn submitLogIn={submitLogin}/>

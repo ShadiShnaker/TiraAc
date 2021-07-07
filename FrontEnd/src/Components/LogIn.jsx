@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/Login-Form-Dark.css";
 import "../Styles/bootstrap.min.css";
-import BG from "../Images/bg.jpg";
 
 export default function LogIn(props) {
     const [email, setEmail] = useState("");
@@ -16,7 +15,7 @@ export default function LogIn(props) {
     };
 
     return (
-        <div style={{background: 'linear-gradient(rgba(48,48,48,0.65), rgba(48,48,48,0.65)), url('+BG+') top / cover', backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", height: "100%", borderStyle: "none"}}>
+        <div>
             <section
                 className="rounded login-dark"
                 style={{
