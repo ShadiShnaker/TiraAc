@@ -11,6 +11,7 @@ import AddEvents from "./Components/AddEvents"
 import Meetings from "./Components/Meetings"
 import Members from "./Components/Members"
 import Mailing from "./Components/Mailing"
+import EventContent from "./Components/EventContent";
 const axios = require('axios').default;
 
 
@@ -170,6 +171,9 @@ function App() {
           </Route>
           <Route path="/login">
             <LogIn submitLogIn={submitLogin}/>
+          </Route>
+          <Route path="/eventContent">
+            <EventContent/>
           </Route>
           <Route exact path="/">
             <Redirect to="/index" />
