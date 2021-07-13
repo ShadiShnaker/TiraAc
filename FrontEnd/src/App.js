@@ -12,6 +12,9 @@ import Meetings from "./Components/Meetings"
 import Members from "./Components/Members"
 import Mailing from "./Components/Mailing"
 import EventContent from "./Components/EventContent";
+import EditMember from "./Components/EditMember";
+import EditEvent from "./Components/EditEvent";
+import EditMeeting from "./Components/EditMeeting";
 const axios = require('axios').default;
 
 
@@ -160,11 +163,20 @@ function App() {
           <Route path="/addEvent">
             <AddEvents/>
           </Route>
+          <Route path="/editEvent">
+            <EditEvent/>
+          </Route>
           <Route path="/meetings">
             <Meetings/>
           </Route>
+          <Route path="/editMeeting">
+            <EditMeeting/>
+          </Route>
           <Route path="/members">
             <Members/>
+          </Route>
+          <Route path="/editMember">
+            <EditMember />
           </Route>
           <Route path="/mailing">
             <Mailing/>
@@ -180,8 +192,7 @@ function App() {
           </Route>
         </Switch>
         </BrowserRouter>
-      </body>
-      
+      </body> 
     );
 }
 

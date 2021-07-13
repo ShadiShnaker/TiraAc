@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
-import MemberItem from "../Components/MemberItem";
-import {Link} from 'react-router-dom';
-import BG from "../Images/bg.jpg";
-import "../App"
 const axios = require("axios").default;
 
-export default function Members(props) {
-    const [isAddMemberOpen, SetIsAddMemberOpen] = useState(false);
+export default function EditMember(props) {
     const [memberType, setMemberType] = useState("volunteer");
 
     const [name, setName] = useState("");
@@ -42,7 +37,7 @@ export default function Members(props) {
         setDate(event.target.value);
     };
 
-    const AddNewMember = async () => {
+    const EditMember = async () => {
         try {
             if (
                 name !== "" &&
@@ -52,8 +47,8 @@ export default function Members(props) {
                 password !== "" &&
                 date !== ""
             ) {
-                const res = await axios.post(
-                    "http://localhost:9000/createMember",
+                const res = await axios.patch(
+                    "http://localhost:9000/EditMember",
                     {
                         name: name,
                         id: id,
@@ -71,16 +66,32 @@ export default function Members(props) {
         } catch (error) {}
     };
 
+    const getMemberType = () => {
+        if (memberType === "volunteer"){
+            return "Volunteer";
+        } else {
+            return "Manager";
+        }
+    }
 
-    const getAddMember = () => {
-        if (isAddMemberOpen) {
-            return (
-                <section
+    const changeMemberType = (type) =>{
+        setMemberType(type);
+    }
+
+    return (
+        <div style={{
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100%",
+        }}
+        >
+            <section
                     className="contact-clean"
                     style={{
                         background: "rgba(241,247,252,0)",
                         height: "580px",
                         paddingTop: "20px",
+                        marginTop: "40px"
                     }}
                 >
                     <form
@@ -96,7 +107,7 @@ export default function Members(props) {
                             className="text-center"
                             style={{ color: "rgb(255,255,255)" }}
                         >
-                            Add a New Member
+                            Edit Member
                         </h2>
                         <div className="mb-3">
                             <input
@@ -201,7 +212,7 @@ export default function Members(props) {
                             <button
                                 className="btn"
                                 type="button"
-                                onClick={() => AddNewMember()}
+                                onClick={() => EditMember()}
                                 style={{
                                     marginRight: "0px",
                                     marginLeft: "10px",
@@ -210,78 +221,11 @@ export default function Members(props) {
                                     height: "60px",
                                 }}
                             >
-                                Add New Member
+                                Save Changes
                             </button>
                         </div>
                     </form>
                 </section>
-            );
-        }
-    };
-
-    const changeAddMemberVisibility = () => {
-        SetIsAddMemberOpen(!isAddMemberOpen);
-    };
-
-    const getMemberType = () => {
-        if (memberType === "volunteer"){
-            return "Volunteer";
-        } else {
-            return "Manager";
-        }
-    }
-
-    const getButtonTitle = () => {
-        if (isAddMemberOpen) {
-            return "HIDE";
-        } else {
-            return "ADD A NEW MEMBER";
-        }
-    };
-
-    const changeMemberType = (type) =>{
-        setMemberType(type);
-    }
-
-    return (
-        <div style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%",
-        }}
-        >
-            <section
-                className="d-md-flex d-xl-flex flex-column align-items-md-center justify-content-xl-start align-items-xl-center"
-                style={{
-                    paddingTop: "60px",
-                    width: "100%",
-                }}
-            >
-                <button
-                    className="btn"
-                    onClick={() => changeAddMemberVisibility()}
-                    type="button"
-                    style={{
-                        marginRight: "0px",
-                        marginLeft: "0px",
-                        background: "rgb(47,123,211)",
-                        color: "rgb(255,255,255)",
-                        width: "300px",
-                        marginBottom: "20px",
-                    }}
-                >
-                    {getButtonTitle()}
-                </button>
-
-                {getAddMember()}
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                
-            </section>
         </div>
     );
 }

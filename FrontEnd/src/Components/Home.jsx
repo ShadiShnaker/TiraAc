@@ -5,7 +5,13 @@ import IMG from "../Images/IMG1.jpg";
 
 export default function Home(props) {
     return (
-        <div >
+        <div 
+        style={{
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100%"
+        }}
+        >
             <h1
                 className="text-center text-white d-none d-lg-block site-heading"
                 style={{
@@ -16,7 +22,7 @@ export default function Home(props) {
             >
                 <span
                     className="site-heading-upper mb-3"
-                    style={{ color: "rgb(47,123,211)", marginTop: "40px" }}
+                    style={{ color: "rgb(47,123,211)"}}
                 >
                     Welcome to&nbsp;
                 </span>
