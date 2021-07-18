@@ -8,6 +8,24 @@ const axios = require("axios").default;
 export default function EventContent(props) {
     const [modalShow, setModalShow] = useState(false)
     const [isManager, setIsManager] = useState(true);
+    const [name, setName] = useState("");
+    const [date, setDate] = useState("");
+    const [description, setDescription] = useState("");
+
+    useEffect(() => {
+      async function fetchEventContentData() {
+        console.log("hello im component did mount 1!");
+          const res = await axios.get("http://localhost:9000/eventContent", {
+              params: { eventId: props.eventId },
+          });
+          setName(res.data.name);
+          setDate(res.data.date);
+          setDescription(res.data.description);
+          console.log("hello im component did mount 2!");
+      }
+
+      fetchEventContentData();
+  }, []);
 
     const deleteEvent = async () => {
         try {
@@ -134,7 +152,7 @@ export default function EventContent(props) {
               textAlign: "center",
             }}
           >
-            Event Title
+            {name}
           </h1>
         </section>
         <section
@@ -159,17 +177,7 @@ export default function EventContent(props) {
               overflowY: "auto",
             }}
           >
-            .שלום מה נשמע? תיאור של אירוע&nbsp;
-            <br />
-            .שלום מה נשמע? תיאור של אירוע
-            <br />
-            <br />
-            <br />
-            .שלום מה נשמע? תיאור של אירוע
-            <br />
-            <br />
-            .שלום מה נשמע? תיאור של אירוע
-            <br />
+            {date}<br/>{description}
           </h4>
         </section>
       </div>

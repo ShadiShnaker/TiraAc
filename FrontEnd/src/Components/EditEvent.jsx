@@ -11,6 +11,23 @@ export default function EditEvent(props) {
     const [summery, setSummery] = useState("");
     const [description, setDescription] = useState("");
 
+    useEffect(() => {
+        async function fetchEventContentData() {
+          console.log("hello im component did mount 1!");
+            const res = await axios.get("http://localhost:9000/eventContent", {
+                params: { eventId: props.eventId },
+            });
+            setName(res.data.name);
+            setDate(res.data.date);
+            setCoordinator(res.data.coordinator);
+            setSummery(res.data.summery);
+            setDescription(res.data.description);
+            console.log("hello im component did mount 2!");
+        }
+  
+        fetchEventContentData();
+    }, []);
+
     const handleChangeName = (event) => {
         setName(event.target.value);
     };
@@ -84,6 +101,7 @@ export default function EditEvent(props) {
                             onChange={(event) => handleChangeName(event)}
                             name="name"
                             placeholder="Name"
+                            value={name}
                         />
                         <input
                             className="form-control"
@@ -91,6 +109,7 @@ export default function EditEvent(props) {
                             name="Event Coordinator"
                             onChange={(event) => handleChangeCoordinator(event)}
                             placeholder="Event Coordinator"
+                            value={coordinator}
                             style={{
                                 marginTop: "10px",
                                 color: "rgb(80, 94, 108)",
@@ -100,6 +119,7 @@ export default function EditEvent(props) {
                             className="form-control"
                             type="date"
                             onChange={(event) => handleChangeDate(event)}
+                            value={date}
                             style={{
                                 paddingTop: "6px",
                                 marginTop: "10px",
@@ -116,6 +136,7 @@ export default function EditEvent(props) {
                             rows={10}
                             style={{ marginTop: "0px" }}
                             defaultValue={""}
+                            value={summery}
                         />
                         <textarea
                             className="form-control"
@@ -125,6 +146,7 @@ export default function EditEvent(props) {
                             rows={20}
                             style={{ height: "150px", marginTop: "10px" }}
                             defaultValue={""}
+                            value={description}
                         />
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
