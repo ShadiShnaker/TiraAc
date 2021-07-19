@@ -18,6 +18,18 @@ export default function MeetingItem(props) {
         } catch (error) {}
         setModalShow(false)
     };
+
+    const getType = () => {
+      if (props.meetingType === "managers")
+        return "Managers";
+      else {
+        return "All Members";
+      }
+    }
+
+    const setActiveMeeting = () => {
+      localStorage.setItem( 'ActiveMeeting', props.id);
+    }
    
   return (
     <div
@@ -26,16 +38,18 @@ export default function MeetingItem(props) {
     >
       <div
         className="d-flex justify-content-evenly"
-        style={{ width: "70%", paddingTop: "6px" }}
+        style={{ width: "70%", paddingTop: "6px", textAlign: "center" }}
       >
-        <h4 style={{ color: "rgb(255,255,255)" }}>Meeting Name</h4>
-        <h4 style={{ color: "rgb(255,255,255)" }}>Date</h4>
+        <h4 style={{ width: "30%", color: "rgb(255,255,255)" }}>{props.name}</h4>
+        <h4 style={{ width: "30%", color: "rgb(255,255,255)" }}>{props.date}</h4>
+        <h4 style={{ width: "30%", color: "rgb(255,255,255)" }}>{getType()}</h4>
       </div>
       <div className="justify-content-evenly" style={{ width: "30%" }}>
         <Link
           className="btn"
           to="editMeeting"
           type="button"
+          onClick={() => setActiveMeeting()}
           style={{
             marginRight: "0px",
             marginLeft: "30px",

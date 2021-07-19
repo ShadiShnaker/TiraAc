@@ -16,8 +16,9 @@ export default function EditMember(props) {
     useEffect(() => {
         async function fetchMemberData() {
           console.log("hello im component did mount 1!");
+          let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
             const res = await axios.get("http://localhost:9000/memberContent", {
-                params: { eventId: props.memberId },
+                params: { memberId: activeMemberPage },
             });
             setName(res.data.name);
             setId(res.data.id);
@@ -26,6 +27,7 @@ export default function EditMember(props) {
             setDate(res.data.date);
             console.log("type of res date: " + typeof res.data.date + " res date value: " + res.data.date);
             console.log("type of member date: " + typeof date + " date value: " + date);
+            console.log("activeMemberPage is: " + activeMemberPage);
             setMemberType(res.data.memberType);
             console.log("hello im component did mount 2!");
         }

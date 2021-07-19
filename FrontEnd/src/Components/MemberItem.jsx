@@ -20,6 +20,11 @@ export default function MemberItem(props) {
         } catch (error) {}
         setModalShow(false)
     };
+
+    const setActiveMember = () => {
+      localStorage.setItem( 'ActiveMemberPage', props._id);
+    }
+
   return (
     <div
       className="d-sm-flex d-md-flex d-xl-flex justify-content-evenly justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-xl-center align-items-xl-center"
@@ -27,16 +32,17 @@ export default function MemberItem(props) {
     >
       <div
         className="d-flex justify-content-evenly"
-        style={{ width: "70%", paddingTop: "6px" }}
+        style={{ width: "70%", paddingTop: "6px", textAlign: "center" }}
       >
-        <h4 style={{ color: "rgb(255,255,255)" }}>Member Name</h4>
-        <h4 style={{ color: "rgb(255,255,255)" }}>Member Type</h4>
+        <h4 style={{ width: "50%", color: "rgb(255,255,255)" }}>{props.name}</h4>
+        <h4 style={{ width: "50%", color: "rgb(255,255,255)" }}>{props.memberType}</h4>
       </div>
       <div className="justify-content-evenly" style={{ width: "30%" }}>
         <Link
           to="editMember"
           role="button"
           className="btn"
+          onClick={() => setActiveMember()}
           style={{
             marginRight: "0px",
             marginLeft: "30px",

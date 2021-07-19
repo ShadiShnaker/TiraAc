@@ -30,6 +30,8 @@ function App() {
 
     const [isManager, setIsManager] = useState(true);
 
+    const [chosenMeeting, setChosenMeeting] = useState("")
+
     const callAPI = () => {
         fetch("http://localhost:9000/testAPI")
             .then((res) => res.text())
@@ -176,7 +178,7 @@ function App() {
             <Members/>
           </Route>
           <Route path="/editMember">
-            <EditMember />
+            <EditMember/>
           </Route>
           <Route path="/mailing">
             <Mailing/>

@@ -15,14 +15,15 @@ export default function EditMeeting(props) {
     useEffect(() => {
         async function fetchEventContentData() {
           console.log("hello im component did mount 1!");
+          let activeMeeting = localStorage.getItem( 'ActiveMeeting' );
             const res = await axios.get("http://localhost:9000/meetingContent", {
-                params: { eventId: props.meetingId },
+                params: { meetingId: activeMeeting },
             });
             setName(res.data.name);
             setDate(res.data.date);
             setCoordinator(res.data.coordinator);
             setMeetingType(res.data.meetingType);
-            console.log("hello im component did mount 2!");
+            console.log("this is active meeting: " + activeMeeting);
         }
   
         fetchEventContentData();
