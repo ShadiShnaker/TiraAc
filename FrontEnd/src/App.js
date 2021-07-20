@@ -32,15 +32,8 @@ function App() {
 
     const [chosenMeeting, setChosenMeeting] = useState("")
 
-    const callAPI = () => {
-        fetch("http://localhost:9000/testAPI")
-            .then((res) => res.text())
-            .then((res) => setApiResponse(res))
-            .catch((err) => err);
-    };
 
     useEffect(() => {
-        callAPI();
         console.log(" current state is " + activePage);
         const pathname = window.location.pathname;
         if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing"){

@@ -9,7 +9,7 @@ const axios = require("axios").default;
 
 const config = {
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": 'http://localhost:3000',
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
     }
 };
@@ -31,8 +31,12 @@ export default function Members(props) {
         async function fetchMembers() {
           console.log("hello im component did mount 1!");
             let membersArr = []
-            const res = await axios.get("http://localhost:9000/allMembers", {
+            const res = await axios.get("http://localhost:9000/users/allMembers", {
                 params: { },
+                headers: {
+                    "Access-Control-Allow-Origin": 'http://localhost:3000',
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                  }
             });
             setMembers(res.data.allMembers);
             console.log("this is meetings: " + typeof membersArr);
@@ -85,8 +89,14 @@ export default function Members(props) {
                         password: password,
                         date: date,
                         memberType: memberType
+                    },
+                    {
+                        headers: {
+                          "Access-Control-Allow-Origin": 'http://localhost:3000',
+                          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                        }
                     }
-                , config);
+                );
             }
             else {
               alert( "One of the inputed fields is empty!" );
