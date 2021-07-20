@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
 import BG from "../Images/bg.jpg";
@@ -10,6 +10,21 @@ export default function AddEvents(props) {
     const [date, setDate] = useState("");
     const [summery, setSummery] = useState("");
     const [description, setDescription] = useState("");
+
+    const [image, setImage] = useState(null)
+
+    const inputFile = useRef(null);
+
+    const onUploadFileClick = () => {
+        // `current` points to the mounted file input element
+       inputFile.current.click();
+    };
+
+    const uploadPicture = async (event) => {
+        console.log("this is the picture: " + event.target.files[0].name);
+        setImage(event.target.files[0])
+        var w = window.open(URL.createObjectURL(event.target.files[0]));
+    }
 
     const handleChangeName = (event) => {
         setName(event.target.value);
@@ -39,6 +54,9 @@ export default function AddEvents(props) {
                 summery !== "" &&
                 description !== ""
             ) {
+                var formData = new FormData();
+                formData.append("image", image);
+
                 const res = await axios.post(
                     "http://localhost:9000/createEvent",
                     {
@@ -47,6 +65,12 @@ export default function AddEvents(props) {
                         date: date,
                         summery: summery,
                         description: description,
+                        image: image
+                    },
+                    {
+                        headers: {
+                        'Content-Type': 'multipart/form-data'
+                        }
                     }
                 );
             }
@@ -106,6 +130,7 @@ export default function AddEvents(props) {
                                 color: "rgb(80, 94, 108)",
                             }}
                         />
+                        <input type='file' id='file' accept="image/*" onChange={(event) => uploadPicture(event)} ref={inputFile} style={{display: 'none'}}/>
                     </div>
                     <div className="mb-3">
                         <textarea
@@ -131,6 +156,7 @@ export default function AddEvents(props) {
                         <button
                             className="btn"
                             type="button"
+                            onClick={() => onUploadFileClick()}
                             style={{
                                 background: "rgb(47,123,211)",
                                 borderColor: "rgb(52, 58, 64)",

@@ -11,6 +11,21 @@ export default function Meetings(props) {
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const [coordinator, setCoordinator] = useState("");
+    const [meetings, setMeetings] = useState([]);
+
+    useEffect(() => {
+        async function fetchMeetings() {
+          console.log("hello im component did mount 1!");
+            let meetingsArr = []
+            const res = await axios.get("http://localhost:9000/allMeetings", {
+                params: { },
+            });
+            setMeetings(res.data.allMeetings);
+            console.log("this is meetings: " + typeof meetingsArr);
+        }
+  
+        fetchMeetings();
+    }, []);
 
     const handleChangeName = (event) => {
         setName(event.target.value);
@@ -216,16 +231,15 @@ export default function Meetings(props) {
                 </button>
 
                 {getAddMeeting()}
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
-                <MeetingItem />
+                {meetings.map((x) => (
+                    <MeetingItem
+                    key={x._id}
+                    id={x._id}
+                    name={x.name}
+                    date={x.date}
+                    meetingType={x.meetingType}
+                    ></MeetingItem>
+                ))}
                 
             </section>
         </div>

@@ -12,6 +12,23 @@ export default function EditMeeting(props) {
     const [date, setDate] = useState("");
     const [coordinator, setCoordinator] = useState("");
 
+    useEffect(() => {
+        async function fetchEventContentData() {
+          console.log("hello im component did mount 1!");
+          let activeMeeting = localStorage.getItem( 'ActiveMeeting' );
+            const res = await axios.get("http://localhost:9000/meetingContent", {
+                params: { meetingId: activeMeeting },
+            });
+            setName(res.data.name);
+            setDate(res.data.date);
+            setCoordinator(res.data.coordinator);
+            setMeetingType(res.data.meetingType);
+            console.log("this is active meeting: " + activeMeeting);
+        }
+  
+        fetchEventContentData();
+    }, []);
+
     const handleChangeName = (event) => {
         setName(event.target.value);
     };
@@ -97,6 +114,7 @@ export default function EditMeeting(props) {
                                 name="name"
                                 onChange={(event) => handleChangeName(event)}
                                 placeholder="Name"
+                                value={name}
                             />
                             <input
                                 className="form-control"
@@ -104,6 +122,7 @@ export default function EditMeeting(props) {
                                 name="Event Coordinator"
                                 placeholder="Meeting Coordinator"
                                 onChange={(event) => handleChangeCoordinator(event)}
+                                value={coordinator}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -113,6 +132,7 @@ export default function EditMeeting(props) {
                                 className="form-control"
                                 type="date"
                                 onChange={(event) => handleChangeDate(event)}
+                                value={date}
                                 style={{
                                     paddingTop: "6px",
                                     marginTop: "10px",

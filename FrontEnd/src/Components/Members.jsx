@@ -25,6 +25,22 @@ export default function Members(props) {
     const [password, setPassword] = useState("");
     const [date, setDate] = useState("");
 
+    const [members, setMembers] = useState([]);
+
+    useEffect(() => {
+        async function fetchMembers() {
+          console.log("hello im component did mount 1!");
+            let membersArr = []
+            const res = await axios.get("http://localhost:9000/allMembers", {
+                params: { },
+            });
+            setMembers(res.data.allMembers);
+            console.log("this is meetings: " + typeof membersArr);
+        }
+  
+        fetchMembers();
+    }, []);
+
     const handleChangeName = (event) => {
         setName(event.target.value);
     };
@@ -281,12 +297,18 @@ export default function Members(props) {
                 </button>
 
                 {getAddMember()}
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
-                <MemberItem />
+                {members.map((x) => (
+                    <MemberItem
+                    key={x._id}
+                    _id={x._id}
+                    name={x.name}
+                    phone={x.phone}
+                    email={x.email}
+                    password={x.password}
+                    date={x.date}
+                    memberType={x.memberType}
+                    ></MemberItem>
+                ))}
                 
             </section>
         </div>

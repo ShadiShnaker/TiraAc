@@ -13,6 +13,28 @@ export default function EditMember(props) {
     const [password, setPassword] = useState("");
     const [date, setDate] = useState("");
 
+    useEffect(() => {
+        async function fetchMemberData() {
+          console.log("hello im component did mount 1!");
+          let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
+            const res = await axios.get("http://localhost:9000/memberContent", {
+                params: { memberId: activeMemberPage },
+            });
+            setName(res.data.name);
+            setId(res.data.id);
+            setPhone(res.data.phone);
+            setEmail(res.data.email);
+            setDate(res.data.date);
+            console.log("type of res date: " + typeof res.data.date + " res date value: " + res.data.date);
+            console.log("type of member date: " + typeof date + " date value: " + date);
+            console.log("activeMemberPage is: " + activeMemberPage);
+            setMemberType(res.data.memberType);
+            console.log("hello im component did mount 2!");
+        }
+  
+        fetchMemberData();
+    }, []);
+
     const handleChangeName = (event) => {
         setName(event.target.value);
     };
@@ -116,6 +138,7 @@ export default function EditMember(props) {
                                 name="name"
                                 onChange={(event) => handleChangeName(event)}
                                 placeholder="Name"
+                                value={name}
                             />
                             <input
                                 className="form-control"
@@ -123,6 +146,7 @@ export default function EditMember(props) {
                                 name="Event Coordinator"
                                 placeholder="ID"
                                 onChange={(event) => handleChangeId(event)}
+                                value={id}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -134,6 +158,7 @@ export default function EditMember(props) {
                                 name="Event Coordinator"
                                 placeholder="Phone"
                                 onChange={(event) => handleChangePhone(event)}
+                                value={phone}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -145,6 +170,7 @@ export default function EditMember(props) {
                                 name="Event Coordinator"
                                 placeholder="Email"
                                 onChange={(event) => handleChangeEmail(event)}
+                                value={email}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -165,6 +191,7 @@ export default function EditMember(props) {
                                 className="form-control"
                                 type="date"
                                 onChange={(event) => handleChangeDate(event)}
+                                value={date}
                                 style={{
                                     paddingTop: "6px",
                                     marginTop: "10px",
