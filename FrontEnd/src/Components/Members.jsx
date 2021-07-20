@@ -7,6 +7,13 @@ import BG from "../Images/bg.jpg";
 import "../App"
 const axios = require("axios").default;
 
+const config = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+    }
+};
+
 export default function Members(props) {
     const [isAddMemberOpen, SetIsAddMemberOpen] = useState(false);
     const [memberType, setMemberType] = useState("volunteer");
@@ -53,7 +60,7 @@ export default function Members(props) {
                 date !== ""
             ) {
                 const res = await axios.post(
-                    "http://localhost:9000/createMember",
+                    "http://localhost:9000/users/createMember",
                     {
                         name: name,
                         id: id,
@@ -63,7 +70,7 @@ export default function Members(props) {
                         date: date,
                         memberType: memberType
                     }
-                );
+                , config);
             }
             else {
               alert( "One of the inputed fields is empty!" );
