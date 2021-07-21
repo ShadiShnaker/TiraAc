@@ -29,7 +29,7 @@ export default function Members(props) {
 
     useEffect(() => {
         async function fetchMembers() {
-          console.log("hello im component did mount 1!");
+            console.log("hello im component did mount 1!");
             let membersArr = []
             let token = localStorage.getItem( 'token' );
             const res = await axios.get("http://localhost:9000/users/allMembers", {
@@ -101,7 +101,11 @@ export default function Members(props) {
             else {
               alert( "One of the inputed fields is empty!" );
             }
-        } catch (error) {}
+        } catch (err) {
+            if (err.response.data.message){
+                alert(err.response.data.message.replace(/^\S+/g, "Email"));
+            }
+        }
     };
 
 
