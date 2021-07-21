@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/mongodb-realm
 /.pnp
 .pnp.js
 

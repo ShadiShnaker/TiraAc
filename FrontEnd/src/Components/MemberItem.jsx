@@ -32,12 +32,12 @@ export default function MemberItem(props) {
     >
       <div
         className="d-flex justify-content-evenly"
-        style={{ width: "70%", paddingTop: "6px", textAlign: "center" }}
+        style={{ width: "67%", paddingTop: "6px", textAlign: "center" }}
       >
         <h4 style={{ width: "50%", color: "rgb(255,255,255)" }}>{props.name}</h4>
         <h4 style={{ width: "50%", color: "rgb(255,255,255)" }}>{props.memberType}</h4>
       </div>
-      <div className="justify-content-evenly" style={{ width: "30%" }}>
+      <div className="justify-content-evenly" style={{ width: "33%" }}>
         <Link
           to="editMember"
           role="button"

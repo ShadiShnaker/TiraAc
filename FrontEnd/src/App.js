@@ -18,19 +18,15 @@ import EditMeeting from "./Components/EditMeeting";
 const axios = require('axios').default;
 
 
-
 function App() {
-    const [apiResponse, setApiResponse] = useState("");
 
     const [activePage, setActivePage] = useState(window.location.pathname);
 
     const [activeSubPage, setActiveSubPage] = useState(window.location.pathname);
 
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const [isManager, setIsManager] = useState(true);
-
-    const [chosenMeeting, setChosenMeeting] = useState("")
 
 
     useEffect(() => {
@@ -38,6 +34,10 @@ function App() {
         const pathname = window.location.pathname;
         if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing"){
           setActivePage("/member");
+        }
+        console.log("this is token: " + localStorage.getItem("token"))
+        if(localStorage.getItem("token") !== null){
+          setIsLoggedIn(true)
         }
     }, []);
 
@@ -73,10 +73,13 @@ function App() {
 
     const submitLogin = async (pass, email) =>{
       try{
-      const res = await axios.post('http://localhost:9000/login', { password: pass, email: email });
+        const res = await axios.post('http://localhost:9000/auth/logIn', { password: pass, email: email });
+        localStorage.setItem( 'token', res.data.token);
+        setIsLoggedIn(true);
+        window.location.replace("/index")
       }
-      catch (error) {
-
+      catch (err) {
+        alert(err.response.data)
       }
       console.log("pass is " + pass + "email is " + email);
 
@@ -120,9 +123,17 @@ function App() {
       }
     }
 
-    const logout = () => {
+    const logout = async () => {
+      let token = localStorage.getItem( 'token' );
+      try {
+        await axios.post('http://localhost:9000/auth/logOut', {}, {headers: {Authorization: token}});
+      } catch (err){
+      console.log("this is the status response of logout: "+ err)
+      alert(err);
+    }
       setIsLoggedIn(false);
       changeActivePage("/login");
+      localStorage.clear();
     }
 
     return (

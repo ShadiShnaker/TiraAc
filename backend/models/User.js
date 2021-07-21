@@ -11,24 +11,28 @@ const User = mongoonse.Schema({
         require: true
     },
 
-    Id: {
+    id: {
         type: String,
         require: true
     },
 
-    Phone:{
+    phone:{
         type: String,
         require: true
     },
 
-    DOB:{
+    date:{
         type: String,
         require: true
     },
 
-    MemberType:{
+    memberType:{
         type: String,
         require: true
+    },
+    authID:{
+        type: String,
+        required: true
     }
 })
 

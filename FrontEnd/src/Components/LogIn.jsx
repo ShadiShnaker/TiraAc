@@ -15,7 +15,11 @@ export default function LogIn(props) {
     };
 
     return (
-        <div>
+        <div style={{
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100%",
+        }}>
             <section
                 className="rounded login-dark"
                 style={{

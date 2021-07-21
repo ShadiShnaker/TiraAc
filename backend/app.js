@@ -6,7 +6,7 @@ var logger = require("morgan");
 var cors = require("cors");
 //var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-var tsetAPIRouter = require("./routes/testAPI");
+var authRouter = require("./routes/auth")
 const mongoonse = require("mongoose")
 var http = require("http");
 var app = express();
@@ -39,7 +39,7 @@ app.use(cookieParser());
 
 //app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/testAPI", tsetAPIRouter);
+app.use("/auth", authRouter);
 // catch 404 and forward to error handler
 
 // app.use(function (req, res, next) {

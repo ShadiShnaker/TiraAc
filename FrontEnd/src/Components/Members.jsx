@@ -31,12 +31,12 @@ export default function Members(props) {
         async function fetchMembers() {
           console.log("hello im component did mount 1!");
             let membersArr = []
+            let token = localStorage.getItem( 'token' );
             const res = await axios.get("http://localhost:9000/users/allMembers", {
                 params: { },
                 headers: {
-                    "Access-Control-Allow-Origin": 'http://localhost:3000',
-                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-                  }
+                    Authorization: token
+                }
             });
             setMembers(res.data.allMembers);
             console.log("this is meetings: " + typeof membersArr);

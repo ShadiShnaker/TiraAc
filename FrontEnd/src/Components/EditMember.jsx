@@ -17,7 +17,7 @@ export default function EditMember(props) {
         async function fetchMemberData() {
           console.log("hello im component did mount 1!");
           let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
-            const res = await axios.get("http://localhost:9000/memberContent", {
+            const res = await axios.get("http://localhost:9000/users/memberContent", {
                 params: { memberId: activeMemberPage },
             });
             setName(res.data.name);
@@ -69,9 +69,11 @@ export default function EditMember(props) {
                 password !== "" &&
                 date !== ""
             ) {
+                let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
                 const res = await axios.patch(
-                    "http://localhost:9000/EditMember",
+                    "http://localhost:9000/users/editMember",
                     {
+                        _id: activeMemberPage,
                         name: name,
                         id: id,
                         phone: phone,
