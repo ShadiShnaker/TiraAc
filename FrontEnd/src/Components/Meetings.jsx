@@ -17,11 +17,12 @@ export default function Meetings(props) {
         async function fetchMeetings() {
           console.log("hello im component did mount 1!");
             let meetingsArr = []
-            const res = await axios.get("http://localhost:9000/allMeetings", {
-                params: { },
+            const res = await axios.get("http://localhost:9000/meetings/allMeetings", {
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                }
             });
             setMeetings(res.data.allMeetings);
-            console.log("this is meetings: " + typeof meetingsArr);
         }
   
         fetchMeetings();
@@ -46,19 +47,28 @@ export default function Meetings(props) {
                 date !== ""
             ) {
                 const res = await axios.post(
-                    "http://localhost:9000/createMeeting",
+                    "http://localhost:9000/meetings/createMeeting",
                     {
                         name: name,
                         coordinator: coordinator,
                         date: date,
                         meetingType: meetingType
+                    },
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token")
+                        }
                     }
                 );
+                alert(res.data);
+                window.location.reload();
             }
             else {
               alert( "One of the inputed fields is empty!" );
             }
-        } catch (error) {}
+        } catch (error) {
+            alert("Creating a new meeting failed!");
+        }
     };
 
 

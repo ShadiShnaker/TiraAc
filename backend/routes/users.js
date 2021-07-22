@@ -3,7 +3,7 @@ var router = express.Router();
 const env = require("dotenv/config")
 const Realm = require("realm");
 const realmApp = new Realm.App({ id: process.env.AUTHDB });
-const verifyToken = require("./verification")
+const verification = require("./verification")
 
 const UserModel = require("../models/User");
 
@@ -17,8 +17,7 @@ router.get("/", function (req, res, next) {
 //   res.send();
 // })
 
-router.get("/allMembers", verifyToken, async (req, res) => {
-    console.log("all members");
+router.get("/allMembers", verification.verifyToken, verification.verifyManager, async (req, res) => {
     const users = await UserModel.find();
     var response = { allMembers : users};
     res.send(response);
@@ -26,7 +25,7 @@ router.get("/allMembers", verifyToken, async (req, res) => {
 
 //router.options("/allMembers", cors())
 
-router.post("/createMember", async (req, res) => {
+router.post("/createMember", verification.verifyToken, verification.verifyManager, async (req, res) => {
     try {
         await realmApp.emailPasswordAuth.registerUser(req.body.email, req.body.password);
         const credentials = Realm.Credentials.emailPassword(
@@ -46,7 +45,7 @@ router.post("/createMember", async (req, res) => {
         });
         await user.save();
         await authUser.logOut();
-        res.status(200).send()
+        res.status(200).send("Member created successfully!")
     }
     catch(err) {
         res.status(500);
@@ -54,7 +53,7 @@ router.post("/createMember", async (req, res) => {
     }
 });
 
-router.get("/memberContent", async (req, res) => {
+router.get("/memberContent", verification.verifyToken, verification.verifyManager, async (req, res) => {
     console.log("member id: " + req.query.memberId)
     try {
         const user = await UserModel.findById(req.query.memberId);
@@ -66,17 +65,32 @@ router.get("/memberContent", async (req, res) => {
     }
 })
 
-router.patch("/editMember", async (req, res) => {
+router.patch("/editMember", verification.verifyToken, verification.verifyManager, async (req, res) => {
     console.log("member id: " + req.body._id)
     try {
         const update = await UserModel.updateOne({_id: req.body._id}, {
             $set: req.body
         });
-        res.status(200);
-        res.send(update);
+        res.status(200).send(update);
+        
     } catch (err) {
         res.status(500);
         res.send(err);
+    }
+})
+
+router.delete("/deleteMember", verification.verifyToken, verification.verifyManager, async (req, res) => {
+    try{
+        const userToDelete = await UserModel.findById(req.query.id);
+
+        const deletedUser = await UserModel.deleteOne({
+            _id: req.query.id
+        })
+        console.log(userToDelete.authID)
+        await realmApp.removeUser(realmApp.allUsers[userToDelete.authID])
+        res.status(200).send(deletedUser);
+    } catch (err) {
+        res.status(500).send(err);
     }
 })
 

@@ -10,26 +10,28 @@ export default function EditMember(props) {
     const [id, setId] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [date, setDate] = useState("");
 
     useEffect(() => {
         async function fetchMemberData() {
           console.log("hello im component did mount 1!");
           let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
+          try{
             const res = await axios.get("http://localhost:9000/users/memberContent", {
                 params: { memberId: activeMemberPage },
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                } 
             });
             setName(res.data.name);
             setId(res.data.id);
             setPhone(res.data.phone);
             setEmail(res.data.email);
             setDate(res.data.date);
-            console.log("type of res date: " + typeof res.data.date + " res date value: " + res.data.date);
-            console.log("type of member date: " + typeof date + " date value: " + date);
-            console.log("activeMemberPage is: " + activeMemberPage);
             setMemberType(res.data.memberType);
-            console.log("hello im component did mount 2!");
+            } catch (err) {
+                alert("Could not get requested member info");
+            }
         }
   
         fetchMemberData();
@@ -47,14 +49,6 @@ export default function EditMember(props) {
         setPhone(event.target.value);
     };
 
-    const handleChangeEmail = (event) => {
-        setEmail(event.target.value);
-    };
-
-    const handleChangePassword = (event) => {
-        setPassword(event.target.value);
-    };
-
     const handleChangeDate = (event) => {
         setDate(event.target.value);
     };
@@ -66,28 +60,40 @@ export default function EditMember(props) {
                 id !== "" &&
                 phone !== "" &&
                 email !== "" &&
-                password !== "" &&
                 date !== ""
             ) {
-                let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
-                const res = await axios.patch(
-                    "http://localhost:9000/users/editMember",
-                    {
-                        _id: activeMemberPage,
-                        name: name,
-                        id: id,
-                        phone: phone,
-                        email: email,
-                        password: password,
-                        date: date,
-                        memberType: memberType
-                    }
-                );
+                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                if (re.test(email)) {
+                    let activeMemberPage = localStorage.getItem( 'ActiveMemberPage' );
+                    const res = await axios.patch(
+                        "http://localhost:9000/users/editMember",
+                        {
+                            _id: activeMemberPage,
+                            name: name,
+                            id: id,
+                            phone: phone,
+                            email: email,
+                            date: date,
+                            memberType: memberType
+                        },
+                        {
+                            headers: {
+                                Authorization: localStorage.getItem("token")
+                            }
+                        }
+                    );
+                    alert("Updated Successfully!");
+                    window.location.replace("/members")
+                } else {
+                    alert( "You must use a valid email!" );
+                }
             }
             else {
-              alert( "One of the inputed fields is empty!" );
+              alert( "One or more of the input fields are empty!" );
             }
-        } catch (error) {}
+        } catch (error) {
+            alert("Failed updating the requested member!");
+        }
     };
 
     const getMemberType = () => {
@@ -124,7 +130,7 @@ export default function EditMember(props) {
                             paddingTop: "30px",
                             background:
                                 "linear-gradient(var(--bs-gray-dark), rgba(255,255,255,0.2)), rgba(134,142,150,0)",
-                            width: "500px",
+                            width: "500px"
                         }}
                     >
                         <h2
@@ -161,29 +167,6 @@ export default function EditMember(props) {
                                 placeholder="Phone"
                                 onChange={(event) => handleChangePhone(event)}
                                 value={phone}
-                                style={{
-                                    marginTop: "10px",
-                                    color: "rgb(80, 94, 108)",
-                                }}
-                            />
-                            <input
-                                className="form-control"
-                                type="text"
-                                name="Event Coordinator"
-                                placeholder="Email"
-                                onChange={(event) => handleChangeEmail(event)}
-                                value={email}
-                                style={{
-                                    marginTop: "10px",
-                                    color: "rgb(80, 94, 108)",
-                                }}
-                            />
-                            <input
-                                className="form-control"
-                                type="password"
-                                name="Event Coordinator"
-                                placeholder="Initial Password"
-                                onChange={(event) => handleChangePassword(event)}
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",

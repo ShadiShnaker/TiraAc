@@ -15,6 +15,7 @@ import EventContent from "./Components/EventContent";
 import EditMember from "./Components/EditMember";
 import EditEvent from "./Components/EditEvent";
 import EditMeeting from "./Components/EditMeeting";
+import ResetPass from "./Components/ResetPass";
 const axios = require('axios').default;
 
 
@@ -26,18 +27,38 @@ function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const [isManager, setIsManager] = useState(true);
+    const [isManager, setIsManager] = useState(false);
 
 
     useEffect(() => {
+      async function fetchPermission(){
+        try {
+          const res = await axios.get("http://localhost:9000/auth/permission", {
+                params: { },
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                }
+            });
+            const permission = res.data;
+            console.log("my permission: " + permission)
+            if (permission === "manager"){
+              setIsManager(true);
+            } else {
+              setIsManager(false);
+            }
+        } catch (err) {}
+      }
         console.log(" current state is " + activePage);
         const pathname = window.location.pathname;
-        if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing"){
+        if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing" || pathname === "/editMember" || pathname === "/editMeeting"){
           setActivePage("/member");
+        } else {
+          setActivePage(pathname);
         }
         console.log("this is token: " + localStorage.getItem("token"))
         if(localStorage.getItem("token") !== null){
           setIsLoggedIn(true)
+          fetchPermission();
         }
     }, []);
 
@@ -79,9 +100,12 @@ function App() {
         window.location.replace("/index")
       }
       catch (err) {
-        alert(err.response.data)
+        if (err.response.data){
+          alert(err.response.data);
+        } else {
+          alert("Failed log in!");
+        }
       }
-      console.log("pass is " + pass + "email is " + email);
 
     }
 
@@ -90,19 +114,52 @@ function App() {
       changeActiveSubPage(sub);
     }
 
-    const getLoggedInNavBar = () => {
-      const pathname = window.location.pathname;
-      if (isLoggedIn && isManager && (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing")){
-        return(
-          <nav className="navbar navbar-dark navbar-expand fixed-top py-lg-4" id="mainNav" style={{background: 'linear-gradient(90deg, rgba(52,58,64,0.7) 0%, rgb(97,97,97) 50%, rgba(52,58,64,0.7)), rgba(52,58,64,0)', color: 'var(--bs-gray-dark)', marginTop: '85px', height: '34px'}}>
-        <div className="container"><button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navbarResponsive"><span className="visually-hidden">Toggle navigation</span><span className="navbar-toggler-icon" /></button>
-          <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className="navbar-nav mx-auto">
+    const getSubNavBar = () => {
+      if (isManager && isLoggedIn){
+        return (
+          <ul className="navbar-nav mx-auto">
             <li className="nav-item"><Link to="/addEvent" onClick={() => changeActiveSubPage("/addEvent")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/addEvent")}}>Add Event</a></Link></li>
             <li className="nav-item"><Link to="/meetings" onClick={() => changeActiveSubPage("/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/meetings")}}>Meetings</a></Link></li>
             <li className="nav-item"><Link to="/members" onClick={() => changeActiveSubPage("/members")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/members")}}>Members</a></Link></li>
             <li className="nav-item"><Link to="/mailing" onClick={() => changeActiveSubPage("/mailing")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/mailing")}}>Mailing</a></Link></li>
+            <li className="nav-item" onClick={() => sendPassResetReq()} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/account")}}>Change Password</a></li>
             </ul>
+        )
+      } else if ( isLoggedIn) {
+        return (
+          <ul className="navbar-nav mx-auto">
+           
+            <li className="nav-item"><Link to="/meetings" onClick={() => changeActiveSubPage("/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/meetings")}}>Meetings</a></Link></li>
+            <li className="nav-item" onClick={() => sendPassResetReq()} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActiveSubPage("/account")}}>Change Password</a></li>
+            
+            </ul>
+        )
+      }
+    }
+
+    const sendPassResetReq = async () => {
+      try {
+        console.log("this is token when changing pass: " + localStorage.getItem("token"));
+          const res = await axios.post("http://localhost:9000/auth/sendPasswordReset", {},
+           {
+              headers: {
+                  Authorization: localStorage.getItem("token")
+              }
+          });
+          alert("Email with password reset link sent!");
+      } catch (err) {
+          alert("Cannot sent password reset email!");
+      }
+  }
+
+    const getLoggedInNavBar = () => {
+      const pathname = window.location.pathname;
+      if (pathname === "/addEvent" || pathname === "/meetings" || pathname === "/member" || pathname === "/members" || pathname === "/mailing" || pathname === "/editMember" || pathname === "/editMeeting"){
+        return(
+          <nav className="navbar navbar-dark navbar-expand fixed-top py-lg-4" id="mainNav" style={{background: 'linear-gradient(90deg, rgba(52,58,64,0.7) 0%, rgb(97,97,97) 50%, rgba(52,58,64,0.7)), rgba(52,58,64,0)', color: 'var(--bs-gray-dark)', marginTop: '85px', height: '34px'}}>
+        <div className="container"><button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navbarResponsive"><span className="visually-hidden">Toggle navigation</span><span className="navbar-toggler-icon" /></button>
+          <div className="collapse navbar-collapse" id="navbarResponsive">
+            {getSubNavBar()}
           </div>
         </div>
       </nav>
@@ -111,14 +168,9 @@ function App() {
     }
 
     const getSignInMemberLink = () => {
-      if (isLoggedIn && isManager){
-        return(
-          <li className="nav-item"><Link to="/member" onClick={() => changeAllActivePages("/member", "/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/member")}}>Member Page</a></Link></li>
-        );
-      }
-      else if (isLoggedIn){
+      if (isLoggedIn){
         return (
-          <li className="nav-item"><Link to="/meetings" onClick={() => changeActivePage("/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/meetings")}}>Meetings</a></Link></li>
+          <li className="nav-item"><Link to="/member" onClick={() => changeAllActivePages("/member", "/meetings")} style={{textDecorationLine: "none"}}><a className="nav-link"  style={{color: isCurrentActivePage("/member")}}>Member Page</a></Link></li>
         );
       }
     }
@@ -127,13 +179,10 @@ function App() {
       let token = localStorage.getItem( 'token' );
       try {
         await axios.post('http://localhost:9000/auth/logOut', {}, {headers: {Authorization: token}});
-      } catch (err){
-      console.log("this is the status response of logout: "+ err)
-      alert(err);
-    }
+      } catch (err) {}
+      localStorage.clear();
       setIsLoggedIn(false);
       changeActivePage("/login");
-      localStorage.clear();
     }
 
     return (
@@ -195,6 +244,9 @@ function App() {
           </Route>
           <Route exact path="/">
             <Redirect to="/index" />
+          </Route>
+          <Route path="/resetPassword">
+            <ResetPass/>
           </Route>
         </Switch>
         </BrowserRouter>

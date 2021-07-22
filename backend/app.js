@@ -6,7 +6,8 @@ var logger = require("morgan");
 var cors = require("cors");
 //var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-var authRouter = require("./routes/auth")
+var authRouter = require("./routes/auth");
+var meetingsRouter = require("./routes/meetings");
 const mongoonse = require("mongoose")
 var http = require("http");
 var app = express();
@@ -40,6 +41,7 @@ app.use(cookieParser());
 //app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/meetings", meetingsRouter);
 // catch 404 and forward to error handler
 
 // app.use(function (req, res, next) {

@@ -79,6 +79,8 @@ export default function Members(props) {
                 password !== "" &&
                 date !== ""
             ) {
+                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                if (re.test(email)) {
                 const res = await axios.post(
                     "http://localhost:9000/users/createMember",
                     {
@@ -89,21 +91,26 @@ export default function Members(props) {
                         password: password,
                         date: date,
                         memberType: memberType
-                    },
+                    }, 
                     {
                         headers: {
-                          "Access-Control-Allow-Origin": 'http://localhost:3000',
-                          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                            Authorization: localStorage.getItem("token")
                         }
-                    }
-                );
+                    });
+                    alert(res.data);
+                    window.location.reload();
+                } else {
+                    alert( "You must use a valid email!" );
+                }
             }
             else {
-              alert( "One of the inputed fields is empty!" );
+              alert( "One or more of the input fields are empty!" );
             }
         } catch (err) {
             if (err.response.data.message){
-                alert(err.response.data.message.replace(/^\S+/g, "Email"));
+                alert(err.response.data.message.replace("name", "Email"));
+            } else {
+                alert("Member creation failed!");
             }
         }
     };

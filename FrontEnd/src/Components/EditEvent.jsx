@@ -57,7 +57,7 @@ export default function EditEvent(props) {
                 description !== ""
             ) {
                 const res = await axios.patch(
-                    "http://localhost:9000/EditEvent",
+                    "http://localhost:9000/editEvent",
                     {
                         name: name,
                         coordinator: coordinator,

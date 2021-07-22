@@ -16,14 +16,22 @@ export default function EditMeeting(props) {
         async function fetchEventContentData() {
           console.log("hello im component did mount 1!");
           let activeMeeting = localStorage.getItem( 'ActiveMeeting' );
-            const res = await axios.get("http://localhost:9000/meetingContent", {
-                params: { meetingId: activeMeeting },
-            });
-            setName(res.data.name);
-            setDate(res.data.date);
-            setCoordinator(res.data.coordinator);
-            setMeetingType(res.data.meetingType);
-            console.log("this is active meeting: " + activeMeeting);
+          try {
+                const res = await axios.get("http://localhost:9000/meetings/meetingContent", {
+                    params: { meetingId: activeMeeting },
+                    headers: {
+                        Authorization: localStorage.getItem("token")
+                    }
+                });
+                setName(res.data.name);
+                setDate(res.data.date);
+                setCoordinator(res.data.coordinator);
+                setMeetingType(res.data.meetingType);
+                console.log("this is active meeting: " + activeMeeting);
+            }
+            catch (err){
+                alert("Could not get meeting data!");
+            }
         }
   
         fetchEventContentData();
@@ -41,26 +49,37 @@ export default function EditMeeting(props) {
         setDate(event.target.value);
     };
 
-    const createNewMeeting = async () => {
+    const editMeeting = async () => {
         try {
             if (
                 name !== "" &&
                 date !== ""
             ) {
-                const res = await axios.post(
-                    "http://localhost:9000/createMeeting",
+                let activeMeeting = localStorage.getItem( 'ActiveMeeting' );
+                const res = await axios.patch(
+                    "http://localhost:9000/meetings/editMeeting",
                     {
+                        _id: activeMeeting,
                         name: name,
                         coordinator: coordinator,
                         date: date,
                         meetingType: meetingType
+                    },
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token")
+                        }
                     }
                 );
+                alert("Updated Successfully!");
+                window.location.replace("/meetings")
             }
             else {
               alert( "One of the inputed fields is empty!" );
             }
-        } catch (error) {}
+        } catch (error) {
+            alert("Could not update the meeting!");
+        }
     };
 
     const getMeetingType = () => {
@@ -179,7 +198,7 @@ export default function EditMeeting(props) {
                             <button
                                 className="btn"
                                 type="button"
-                                onClick={() => createNewMeeting()}
+                                onClick={() => editMeeting()}
                                 style={{
                                     marginRight: "0px",
                                     marginLeft: "10px",

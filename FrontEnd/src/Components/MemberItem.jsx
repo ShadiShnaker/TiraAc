@@ -12,12 +12,18 @@ export default function MemberItem(props) {
     const deleteMember = async () => {
         try {
                 const res = await axios.delete(
-                    "http://localhost:9000/deleteMember",
+                    "http://localhost:9000/users/deleteMember",
                     {
-                        id: ""
+                        params: {id: props._id},
+                        headers: {
+                          Authorization: localStorage.getItem("token")
+                        }
                     }
                 );
-        } catch (error) {}
+                window.location.reload();
+        } catch (error) {
+          alert("Could not delete memeber!")
+        }
         setModalShow(false)
     };
 

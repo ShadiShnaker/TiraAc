@@ -10,12 +10,20 @@ export default function MeetingItem(props) {
     const deleteMeeting = async () => {
         try {
                 const res = await axios.delete(
-                    "http://localhost:9000/deleteMeeting",
+                    "http://localhost:9000/meetings/deleteMeeting",
                     {
-                        id: ""
+                      params: {
+                        id: props.id
+                      },
+                      headers: {
+                        Authorization: localStorage.getItem("token")
+                      }
                     }
                 );
-        } catch (error) {}
+                window.location.reload();
+        } catch (error) {
+          alert("could not delete meeting");
+        }
         setModalShow(false)
     };
 

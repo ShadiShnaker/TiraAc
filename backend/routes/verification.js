@@ -10,9 +10,11 @@ const verifyToken = async (req, res, next) => {
     }
 
     try {
+        console.log("this first")
         const verify = jwt.verify(token, process.env.SECRET);
         let user = await UserModel.findById(verify);
-        req.user = user.authID;
+        req.auth = user.authID;
+        req._id = verify;
         next();
     }
     catch (err) {
@@ -20,4 +22,19 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
-module.exports = verifyToken
+const verifyManager = async (req, res, next) => {
+    try{
+        console.log("this second")
+        const user = await UserModel.findById(req._id);
+        if (user.memberType === "manager"){
+            next();
+        } else {
+            console.log("this not a manager")
+            res.status(401).send('Invalid Permission!');
+        }
+    } catch (err) {
+        res.status(401).send(err);
+    }
+}
+
+module.exports = {verifyToken, verifyManager}
