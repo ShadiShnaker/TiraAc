@@ -8,7 +8,7 @@ export default function AddEvents(props) {
     const [name, setName] = useState("");
     const [coordinator, setCoordinator] = useState("");
     const [date, setDate] = useState("");
-    const [summery, setSummery] = useState("");
+    const [summary, setSummary] = useState("");
     const [description, setDescription] = useState("");
 
     const [image, setImage] = useState(null)
@@ -39,7 +39,7 @@ export default function AddEvents(props) {
     };
 
     const handleChangeSummery = (event) => {
-        setSummery(event.target.value);
+        setSummary(event.target.value);
     };
 
     const handleChangeDescription = (event) => {
@@ -51,25 +51,25 @@ export default function AddEvents(props) {
             if (
                 name !== "" &&
                 date !== "" &&
-                summery !== "" &&
+                summary !== "" &&
                 description !== ""
             ) {
                 var formData = new FormData();
-                formData.append("image", image);
+                formData.append("image", image, image.name);
+                formData.append("name", name);
+                formData.append("coordinator", coordinator);
+                formData.append("summary", summary);
+                formData.append("description",description);
+                formData.append("date", date);
 
                 const res = await axios.post(
-                    "http://localhost:9000/createEvent",
-                    {
-                        name: name,
-                        coordinator: coordinator,
-                        date: date,
-                        summery: summery,
-                        description: description,
-                        image: image
-                    },
+                    "http://localhost:9000/event/createEvent",
+                    formData,
                     {
                         headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                         Authorization: localStorage.getItem("token")
+
                         }
                     }
                 );
@@ -77,7 +77,7 @@ export default function AddEvents(props) {
             else {
               alert( "One of the inputed fields is empty!" );
             }
-        } catch (error) {}
+        } catch (error) {alert(error)}
     };
 
     return (

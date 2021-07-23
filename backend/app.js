@@ -9,6 +9,7 @@ var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
 var meetingsRouter = require("./routes/meetings");
 var mailRouter = require("./routes/mailing")
+var eventRouter = require("./routes/event");
 const mongoonse = require("mongoose")
 var http = require("http");
 var app = express();
@@ -44,6 +45,7 @@ app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/mail", mailRouter);
+app.use("/event", eventRouter);
 // catch 404 and forward to error handler
 
 // app.use(function (req, res, next) {

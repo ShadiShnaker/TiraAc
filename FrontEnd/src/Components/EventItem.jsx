@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link} from 'react-router-dom';
 import "../Styles/bootstrap.min.css";
-import IMG from "../Images/IMG1.jpg";
+//import IMG from "../Images/IMG1.jpg";
 
 export default function EventItem(props) {
+
+
+    const getBlob = () =>{
+        var binaryData = [];
+        binaryData.push(Buffer.from(props.img.data))
+        console.log( props.img)
+        return URL.createObjectURL(new Blob(binaryData, {type: props.img.contentType}))
+    }
+
     return (
         <section
             className="d-xxl-flex justify-content-xxl-center page-section clearfix"
@@ -27,7 +36,7 @@ export default function EventItem(props) {
                 <div className="intro">
                     <img
                         className="intro-img mb-3 mb-lg-0 rounded"
-                        src={IMG}
+                        src={getBlob()}
                         style={{
                             width: "600px",
                             height: "310px",
@@ -51,7 +60,7 @@ export default function EventItem(props) {
                                 className="section-heading-upper"
                                 style={{ marginTop: "-25px" }}
                             >
-                                Event Name
+                                {props.name}
                             </span>
                             <span
                                 className="section-heading-upper"
@@ -60,26 +69,21 @@ export default function EventItem(props) {
                                     marginBottom: "-16px",
                                 }}
                             >
-                                Event Date: 11.06.2143
+                                {props.date}
                             </span>
                         </h2>
                         <p
                             className="mb-3"
                             style={{ fontSize: "18px", marginBottom: "16px" }}
                         >
-                            short description about the event
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
+                            {props.summary}
                         </p>
                         <div className="mx-auto intro-button">
                           
                             <Link
                                 className="btn btn-primary d-inline-block mx-auto btn-xl"
                                 role="button"
-                                to="eventContent" target="_blank" rel="noopener noreferrer"
+                                to={"/eventContent?eventId=" + props.id }
                                 style={{
                                     background: "rgb(47,123,211)",
                                     borderStyle: "none",

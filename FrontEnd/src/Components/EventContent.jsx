@@ -5,37 +5,59 @@ import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 const axios = require("axios").default;
 
+
 export default function EventContent(props) {
     const [modalShow, setModalShow] = useState(false)
     const [isManager, setIsManager] = useState(true);
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
+    const [img, setImg] = useState("");
+    const [imgURL, setImgURL] = useState("");
 
     useEffect(() => {
+
+      const flag = true
+      const urlSearchParams = new URLSearchParams(window.location.search);
       async function fetchEventContentData() {
         console.log("hello im component did mount 1!");
-          const res = await axios.get("http://localhost:9000/eventContent", {
-              params: { eventId: props.eventId },
+        try{
+          const res = await axios.get("http://localhost:9000/event/eventContent", {
+            //tokenId: urlSearchParams.get("eventId"),
+              params: { eventId:  urlSearchParams.get("eventId")},
           });
           setName(res.data.name);
           setDate(res.data.date);
           setDescription(res.data.description);
+          var binaryData = [];
+          binaryData.push(Buffer.from(res.data.img.data))
+          setImgURL(URL.createObjectURL(new Blob(binaryData, {type: res.data.img.contentType})))
+        }catch(err) {console.log(err)}
+          console.log(img)
+          console.log(name)
           console.log("hello im component did mount 2!");
       }
+      
+      fetchEventContentData(); 
 
-      fetchEventContentData();
   }, []);
 
+
     const deleteEvent = async () => {
+      const urlSearchParams = new URLSearchParams(window.location.search);
         try {
                 const res = await axios.delete(
-                    "http://localhost:9000/deleteEvent",
+                    "http://localhost:9000/event/deleteEvent",
                     {
-                        id: ""
+                      params: { eventId:  urlSearchParams.get("eventId")},
+                      headers: {
+                        Authorization: localStorage.getItem("token")
+                      }
                     }
+                  
                 );
-        } catch (error) {}
+                //window.location.replace("/events")
+        } catch (error) {console.log(error)}
         setModalShow(false)
     };
 
@@ -126,7 +148,7 @@ export default function EventContent(props) {
           className="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex justify-content-center align-items-end justify-content-sm-center align-items-sm-end justify-content-md-center align-items-md-end justify-content-lg-center align-items-lg-end justify-content-xl-center align-items-xl-end justify-content-xxl-center align-items-xxl-end"
           style={{
             margin: "40px",
-            background: "url(" + IMG + ") center / cover no-repeat, #ffffff",
+            background: "url(" + imgURL + ") center / cover no-repeat, #ffffff",
             height: "600px",
             borderRadius: "70px",
             width: "90%",
