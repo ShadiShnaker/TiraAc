@@ -8,7 +8,7 @@ export default function EditEvent(props) {
     const [name, setName] = useState("");
     const [coordinator, setCoordinator] = useState("");
     const [date, setDate] = useState("");
-    const [summery, setSummery] = useState("");
+    const [summary, setSummery] = useState("");
     const [description, setDescription] = useState("");
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function EditEvent(props) {
             if (
                 name !== "" &&
                 date !== "" &&
-                summery !== "" &&
+                summary !== "" &&
                 description !== ""
             ) {
                 const res = await axios.patch(
@@ -62,7 +62,7 @@ export default function EditEvent(props) {
                         name: name,
                         coordinator: coordinator,
                         date: date,
-                        summery: summery,
+                        summary: summary,
                         description: description,
                     }
                 );
@@ -136,7 +136,7 @@ export default function EditEvent(props) {
                             rows={10}
                             style={{ marginTop: "0px" }}
                             defaultValue={""}
-                            value={summery}
+                            value={summary}
                         />
                         <textarea
                             className="form-control"

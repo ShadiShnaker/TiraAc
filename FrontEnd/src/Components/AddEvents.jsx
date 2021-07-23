@@ -8,7 +8,7 @@ export default function AddEvents(props) {
     const [name, setName] = useState("");
     const [coordinator, setCoordinator] = useState("");
     const [date, setDate] = useState("");
-    const [summery, setSummery] = useState("");
+    const [summary, setSummery] = useState("");
     const [description, setDescription] = useState("");
 
     const [image, setImage] = useState(null)
@@ -51,7 +51,7 @@ export default function AddEvents(props) {
             if (
                 name !== "" &&
                 date !== "" &&
-                summery !== "" &&
+                summary !== "" &&
                 description !== ""
             ) {
                 var formData = new FormData();
@@ -63,7 +63,7 @@ export default function AddEvents(props) {
                         name: name,
                         coordinator: coordinator,
                         date: date,
-                        summery: summery,
+                        summary: summary,
                         description: description,
                         image: image
                     },
