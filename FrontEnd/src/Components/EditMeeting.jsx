@@ -75,7 +75,7 @@ export default function EditMeeting(props) {
                 window.location.replace("/meetings")
             }
             else {
-              alert( "One of the inputed fields is empty!" );
+              alert( "One of the input fields is empty!" );
             }
         } catch (error) {
             alert("Could not update the meeting!");

@@ -28,14 +28,24 @@ export default function Mailing(props) {
                     {
                         title: title,
                         content: content
+                    },
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token")
+                        }
                     }
                 );
+                alert("Mail sent to all members!");
+                window.location.reload();
             }
             else {
-              alert( "One of the inputed fields is empty!" );
+              alert( "One of the input fields is empty!" );
             }
-        } catch (error) {}
+        } catch (error) {
+            alert("Could not send the email!");
+        }
     };
+
     return (
         <div>
             <section

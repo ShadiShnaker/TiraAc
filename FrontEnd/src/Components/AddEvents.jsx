@@ -81,7 +81,13 @@ export default function AddEvents(props) {
     };
 
     return (
-        <div>
+        <div
+        style={{
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100%",
+        }}
+        >
             <section
                 className="contact-clean"
                 style={{ background: "rgba(241,247,252,0)", height: "100%" }}
