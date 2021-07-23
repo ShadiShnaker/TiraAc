@@ -84,6 +84,7 @@ export default function EventItem(props) {
                                 className="btn btn-primary d-inline-block mx-auto btn-xl"
                                 role="button"
                                 to={"/eventContent?eventId=" + props.id }
+                                target="_blank" rel="noopener noreferrer"
                                 style={{
                                     background: "rgb(47,123,211)",
                                     borderStyle: "none",

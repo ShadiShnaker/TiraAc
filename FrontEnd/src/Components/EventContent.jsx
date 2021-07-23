@@ -12,18 +12,14 @@ export default function EventContent(props) {
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
-    const [img, setImg] = useState("");
     const [imgURL, setImgURL] = useState("");
 
     useEffect(() => {
-
-      const flag = true
       const urlSearchParams = new URLSearchParams(window.location.search);
       async function fetchEventContentData() {
         console.log("hello im component did mount 1!");
         try{
           const res = await axios.get("http://localhost:9000/event/eventContent", {
-            //tokenId: urlSearchParams.get("eventId"),
               params: { eventId:  urlSearchParams.get("eventId")},
           });
           setName(res.data.name);
@@ -33,8 +29,6 @@ export default function EventContent(props) {
           binaryData.push(Buffer.from(res.data.img.data))
           setImgURL(URL.createObjectURL(new Blob(binaryData, {type: res.data.img.contentType})))
         }catch(err) {console.log(err)}
-          console.log(img)
-          console.log(name)
           console.log("hello im component did mount 2!");
       }
       

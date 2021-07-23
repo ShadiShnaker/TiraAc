@@ -27,7 +27,7 @@ server.listen('9000', () => {
 
 mongoonse.connect(process.env.DB,{useNewUrlParser: true, useUnifiedTopology: true} ,(err) => {
   if(err) return console.log(err.message)
-  console.log("Connecting to DB...")
+  console.log("Connected to DB!")
 })
 
 // view engine setup
