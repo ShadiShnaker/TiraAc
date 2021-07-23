@@ -56,7 +56,7 @@ export default function EventContent(props) {
                     }
                   
                 );
-                //window.location.replace("/events")
+                window.location.replace("/events")
         } catch (error) {console.log(error)}
         setModalShow(false)
     };

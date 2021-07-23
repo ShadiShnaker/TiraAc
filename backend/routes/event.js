@@ -46,7 +46,7 @@ router.get("/eventContent", async (req, res) => {
 router.delete("/deleteEvent", verification.verifyToken, verification.verifyManager, async (req, res) => {
     try{
         const deletedEvent = await EventModel.deleteOne({
-            _id: req.query.id
+            _id: req.query.eventId
         })
         res.status(200).send(deletedEvent);
     } catch (err) {
