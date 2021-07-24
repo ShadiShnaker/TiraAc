@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../Styles/bootstrap.min.css";
 import "../Styles/events_button.css";
 import IMG from "../Images/IMG1.jpg";
-import SubNavBar from "./SubNavBar";
 import MainNavBar from "./MainNavBar";
 
 export default function Home(props) {
@@ -67,8 +67,9 @@ export default function Home(props) {
 
                             </p>
                             <div className="mx-auto intro-button">
-                                <a
+                                <Link
                                     className="btn btn-primary d-inline-block mx-auto btn-xl"
+                                    to="/events"
                                     role="button"
                                     href="#"
                                     style={{
@@ -79,7 +80,7 @@ export default function Home(props) {
                                     }}
                                 >
                                     View upcoming events!
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
