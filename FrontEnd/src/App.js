@@ -100,11 +100,12 @@ function App() {
         window.location.replace("/index")
       }
       catch (err) {
-        if (err.response.data){
-          alert(err.response.data);
-        } else {
-          alert("Failed log in!");
-        }
+        alert("Email or password are wrong!");
+        // if (err.response.data){
+        //   alert(err.response.data);
+        // } else {
+        //   alert("Failed log in!");
+        // }
       }
 
     }

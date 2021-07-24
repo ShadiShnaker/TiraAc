@@ -85,4 +85,15 @@ router.post("/createEvent", verification.verifyToken, verification.verifyManager
     }
 })
 
+//////////// Edit Event //////////////////////////////////////////////////////////
+
+router.patch("/editEvent", verification.verifyToken, verification.verifyManager, async (req, res) => {
+    const update = await EventModel.updateOne({_id: req.body._id}, {
+        $set: req.body
+    });
+    res.status(200).send(update);
+})
+
+
+
 module.exports = router;
