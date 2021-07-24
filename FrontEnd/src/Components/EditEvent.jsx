@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 //import {Link} from 'react-router-dom';
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
-import BG from "../Images/bg.jpg";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 export default function EditEvent(props) {
@@ -25,7 +26,10 @@ export default function EditEvent(props) {
     const uploadPicture = async (event) => {
         console.log("this is the picture: " + event.target.files[0].name);
         setImgToUpload(event.target.files[0])
-        setImg(event.target.files[0]);
+        var url = URL.createObjectURL(event.target.files[0])
+        var img = event.target.files[0];
+        img.src = url;
+        setImg(img);
     }
 
     const openImage = () => {
@@ -127,14 +131,23 @@ export default function EditEvent(props) {
     };
 
     return (
-        <div>
+        <div
+        style={{
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100%"
+        }}>
+            <MainNavBar
+            active={"/member"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             <section
                 className="contact-clean"
                 style={{ background: "rgba(241,247,252,0)", height: "100%" }}
             >
                 <form
                     style={{
-                        marginTop: "40px",
                         paddingBottom: "30px",
                         paddingTop: "30px",
                         background:
@@ -202,7 +215,7 @@ export default function EditEvent(props) {
                             defaultValue={""}
                             value={description}
                         />
-                        <h5><a href="#" style={{ marginTop: "10px", color: "white" }} onClick={() => openImage()}> Image file name: {img !== null ? img.name : "empty"} </a></h5>
+                        <h5 style={{ marginTop: "10px", color: "white" }}> Image file name: <a href="#" onClick={() => openImage()}> {img !== null ? img.name : "empty"} </a></h5>
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
                         <button

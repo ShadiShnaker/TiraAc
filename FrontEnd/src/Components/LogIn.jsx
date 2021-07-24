@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/Login-Form-Dark.css";
 import "../Styles/bootstrap.min.css";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 
 export default function LogIn(props) {
     const [email, setEmail] = useState("");
@@ -20,6 +22,11 @@ export default function LogIn(props) {
             overflowY: "auto",
             height: "100%",
         }}>
+            <MainNavBar
+            active={"/login"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             <section
                 className="rounded login-dark"
                 style={{

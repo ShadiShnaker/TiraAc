@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 export default function EditMember(props) {
@@ -115,6 +117,16 @@ export default function EditMember(props) {
             height: "100%",
         }}
         >
+            <MainNavBar
+            active={"/member"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
+            <SubNavBar
+            active={"/members"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             <section
                     className="contact-clean"
                     style={{

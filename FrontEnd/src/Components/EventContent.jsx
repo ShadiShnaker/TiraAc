@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
-import IMG from "../Images/IMG1.jpg";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 
 export default function EventContent(props) {
     const [modalShow, setModalShow] = useState(false)
-    const [isManager, setIsManager] = useState(true);
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
@@ -60,7 +60,7 @@ export default function EventContent(props) {
     };
 
     const showManagerBtns = () => {
-        if(isManager){
+        if(props.isLoggedIn && props.isManager){
             return(
                 <div >
         <Link
@@ -132,6 +132,7 @@ export default function EventContent(props) {
             )
         }
     }
+    
   return (
     <div
       style={{
@@ -140,6 +141,11 @@ export default function EventContent(props) {
         height: "100%",
       }}
     >
+      <MainNavBar
+            active={"/events"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
       <div className="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center">
         {showManagerBtns()}
         <section

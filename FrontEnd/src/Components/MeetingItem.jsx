@@ -52,6 +52,7 @@ export default function MeetingItem(props) {
         <h4 style={{ width: "30%", color: "rgb(255,255,255)" }}>{props.date}</h4>
         <h4 style={{ width: "30%", color: "rgb(255,255,255)" }}>{getType()}</h4>
       </div>
+      { props.isLoggedIn && props.isManager ?
       <div className="justify-content-evenly" style={{ width: "30%" }}>
         <Link
           className="btn"
@@ -120,6 +121,9 @@ export default function MeetingItem(props) {
           </Modal.Footer>
         </Modal>
       </div>
+      :
+      <div></div>
+      }   
     </div>
   );
 }

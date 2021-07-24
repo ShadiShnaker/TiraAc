@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
-import BG from "../Images/bg.jpg";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 export default function Mailing(props) {
@@ -52,6 +53,16 @@ export default function Mailing(props) {
                 className="contact-clean"
                 style={{ background: "rgba(241,247,252,0)", height: "100%" }}
             >
+                <MainNavBar
+            active={"/member"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
+            <SubNavBar
+            active={"/mailing"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
                 <form
                     style={{
                         marginTop: "120px",

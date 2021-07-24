@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link} from 'react-router-dom';
 import "../Styles/bootstrap.min.css";
-//import IMG from "../Images/IMG1.jpg";
 
 export default function EventItem(props) {
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/events_button.css";
 import IMG from "../Images/IMG1.jpg";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 
 export default function Home(props) {
     return (
@@ -12,6 +14,11 @@ export default function Home(props) {
             height: "100%"
         }}
         >
+            <MainNavBar
+            active={"/index"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             <h1
                 className="text-center text-white d-none d-lg-block site-heading"
                 style={{

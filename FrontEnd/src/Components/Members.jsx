@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
 import MemberItem from "../Components/MemberItem";
-import {Link} from 'react-router-dom';
-import BG from "../Images/bg.jpg";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 import "../App"
 const axios = require("axios").default;
 
@@ -294,6 +294,16 @@ export default function Members(props) {
             height: "100%",
         }}
         >
+            <MainNavBar
+            active={"/member"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
+            <SubNavBar
+            active={"/members"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             <section
                 className="d-md-flex d-xl-flex flex-column align-items-md-center justify-content-xl-start align-items-xl-center"
                 style={{

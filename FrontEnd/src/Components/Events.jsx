@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../Styles/bootstrap.min.css";
 import EventItem from "../Components/EventItem";
+import SubNavBar from "./SubNavBar";
+import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 export default function Events(props){
@@ -27,11 +29,11 @@ export default function Events(props){
             height: "100%",
         }}
         >
-            {/* <EventItem/>
-            <EventItem/>
-            <EventItem/>
-            <EventItem/>
-            <EventItem/> */}
+            <MainNavBar
+            active={"/events"}
+            isLoggedIn={props.isLoggedIn}
+            isManager={props.isManager}
+            />
             {events.map((x) => (
                     <EventItem
                     key={x._id}
