@@ -54,7 +54,7 @@ router.delete("/deleteEvent", verification.verifyToken, verification.verifyManag
     }
 })
 
-router.post("/createEvent", verification.verifyToken, verification.verifyManager,upload.single('image') ,async (req, res) => {
+router.post("/createEvent", verification.verifyToken, verification.verifyManager, upload.single('image') ,async (req, res) => {
     try {
         console.log(req.body.name)
         console.log(req.body.coordinator)
@@ -87,11 +87,33 @@ router.post("/createEvent", verification.verifyToken, verification.verifyManager
 
 //////////// Edit Event //////////////////////////////////////////////////////////
 
-router.patch("/editEvent", verification.verifyToken, verification.verifyManager, async (req, res) => {
+router.patch("/editEvent", verification.verifyToken, verification.verifyManager, upload.single('image'), async (req, res) => {
+    if(req.body.image === "not set") {
+        const update = await EventModel.updateOne({_id: req.body._id}, {
+            $set: {
+                name: req.body.name,
+                coordinator: req.body.coordinator,
+                date: req.body.date,
+                summary: req.body.summary,
+                description: req.body.description,
+            }
+        });
+    } else {
     const update = await EventModel.updateOne({_id: req.body._id}, {
-        $set: req.body
+        $set: {
+            name: req.body.name,
+            coordinator: req.body.coordinator,
+            date: req.body.date,
+            summary: req.body.summary,
+            description: req.body.description,
+            img: {
+                data: req.file.buffer,
+                contentType: 'image/png'
+            }
+        }
     });
-    res.status(200).send(update);
+}
+    res.status(200).send("updated an event!");
 })
 
 

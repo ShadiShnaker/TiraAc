@@ -23,7 +23,6 @@ export default function AddEvents(props) {
     const uploadPicture = async (event) => {
         console.log("this is the picture: " + event.target.files[0].name);
         setImage(event.target.files[0])
-        var w = window.open(URL.createObjectURL(event.target.files[0]));
     }
 
     const handleChangeName = (event) => {
@@ -52,7 +51,8 @@ export default function AddEvents(props) {
                 name !== "" &&
                 date !== "" &&
                 summary !== "" &&
-                description !== ""
+                description !== "" &&
+                image !== null
             ) {
                 var formData = new FormData();
                 formData.append("image", image, image.name);
@@ -73,11 +73,13 @@ export default function AddEvents(props) {
                         }
                     }
                 );
+                alert("Event created successfully!");
+                window.location.reload();
             }
             else {
-              alert( "One of the inputed fields is empty!" );
+              alert( "One or more of the input fields are empty!" );
             }
-        } catch (error) {alert(error)}
+        } catch (error) {alert("Couldn't create the event!")}
     };
 
     return (
@@ -157,6 +159,7 @@ export default function AddEvents(props) {
                             style={{ height: "150px", marginTop: "10px" }}
                             defaultValue={""}
                         />
+                        <h5 style={{ marginTop: "10px", color: "white" }}> Image file name: {image !== null ? image.name : ""} </h5>
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
                         <button

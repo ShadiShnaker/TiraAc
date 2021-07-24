@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+//import {Link} from 'react-router-dom';
 import "../Styles/bootstrap.min.css";
 import "../Styles/Form-Clean.css";
 import BG from "../Images/bg.jpg";
@@ -8,21 +9,57 @@ export default function EditEvent(props) {
     const [name, setName] = useState("");
     const [coordinator, setCoordinator] = useState("");
     const [date, setDate] = useState("");
-    const [summary, setSummery] = useState("");
+    const [summary, setSummary] = useState("");
     const [description, setDescription] = useState("");
+    const [eventId, setEventId] = useState("");
+    const [img, setImg] = useState(null);
+    const [imgToUpload, setImgToUpload] = useState("");
+
+    const inputFile = useRef(null);
+
+    const onUploadFileClick = () => {
+        // `current` points to the mounted file input element
+       inputFile.current.click();
+    };
+
+    const uploadPicture = async (event) => {
+        console.log("this is the picture: " + event.target.files[0].name);
+        setImgToUpload(event.target.files[0])
+        setImg(event.target.files[0]);
+    }
+
+    const openImage = () => {
+        window.open(img.src);
+    }
 
     useEffect(() => {
         async function fetchEventContentData() {
-          console.log("hello im component did mount 1!");
-            const res = await axios.get("http://localhost:9000/eventContent", {
-                params: { eventId: props.eventId },
+            try {
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            setEventId(urlSearchParams.get("eventId"));
+            console.log("hello im component did mount 1!");
+            const res = await axios.get("http://localhost:9000/event/eventContent", {
+                params: { eventId: urlSearchParams.get("eventId") },
             });
             setName(res.data.name);
             setDate(res.data.date);
             setCoordinator(res.data.coordinator);
-            setSummery(res.data.summery);
+            setSummary(res.data.summary);
             setDescription(res.data.description);
+           
+            var image = new Image();
+            var binaryData = [];
+            binaryData.push(Buffer.from(res.data.img.data))
+            var blob = new Blob(binaryData, {type: res.data.img.contentType});
+            image.src = URL.createObjectURL(blob)
+            image.name = image.src
+            //setImgURL(URL.createObjectURL(image))
+            setImg(image);
+            setImgToUpload("not set");
             console.log("hello im component did mount 2!");
+            } catch (err) {
+                alert("Couldn't load event data!")
+            }
         }
   
         fetchEventContentData();
@@ -40,37 +77,53 @@ export default function EditEvent(props) {
         setDate(event.target.value);
     };
 
-    const handleChangeSummery = (event) => {
-        setSummery(event.target.value);
+    const handleChangeSummary = (event) => {
+        setSummary(event.target.value);
     };
 
     const handleChangeDescription = (event) => {
         setDescription(event.target.value);
     };
 
-    const createNewEvent = async () => {
+    const editEvent = async () => {
         try {
             if (
                 name !== "" &&
                 date !== "" &&
                 summary !== "" &&
-                description !== ""
+                description !== "" &&
+                img !== null
             ) {
+                var formData = new FormData();
+                formData.append("image", imgToUpload);
+                formData.append("name", name);
+                formData.append("coordinator", coordinator);
+                formData.append("summary", summary);
+                formData.append("description",description);
+                formData.append("date", date);
+                formData.append("_id", eventId);
+
                 const res = await axios.patch(
-                    "http://localhost:9000/editEvent",
+                    "http://localhost:9000/event/editEvent",
+                    formData,
                     {
-                        name: name,
-                        coordinator: coordinator,
-                        date: date,
-                        summary: summary,
-                        description: description,
+                        headers: {
+                        'Content-Type': 'multipart/form-data',
+                         Authorization: localStorage.getItem("token")
+
+                        }
                     }
                 );
+                console.log("this is immediately after editing event");
+                window.location.replace("/events");
+                console.log("this is slightly after editing event")
             }
             else {
               alert( "One of the inputed fields is empty!" );
             }
-        } catch (error) {}
+        } catch (error) {
+            alert("Could not update the event!")
+        }
     };
 
     return (
@@ -126,13 +179,14 @@ export default function EditEvent(props) {
                                 color: "rgb(80, 94, 108)",
                             }}
                         />
+                        <input type='file' id='file' accept="image/*" onChange={(event) => uploadPicture(event)} ref={inputFile} style={{display: 'none'}}/>
                     </div>
                     <div className="mb-3">
                         <textarea
                             className="form-control"
                             name="message"
-                            placeholder="Summery"
-                            onChange={(event) => handleChangeSummery(event)}
+                            placeholder="Summary"
+                            onChange={(event) => handleChangeSummary(event)}
                             rows={10}
                             style={{ marginTop: "0px" }}
                             defaultValue={""}
@@ -148,11 +202,13 @@ export default function EditEvent(props) {
                             defaultValue={""}
                             value={description}
                         />
+                        <h5><a href="#" style={{ marginTop: "10px", color: "white" }} onClick={() => openImage()}> Image file name: {img !== null ? img.name : "empty"} </a></h5>
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
                         <button
                             className="btn"
                             type="button"
+                            onClick={() => onUploadFileClick()}
                             style={{
                                 background: "rgb(47,123,211)",
                                 borderColor: "rgb(52, 58, 64)",
@@ -168,7 +224,7 @@ export default function EditEvent(props) {
                         <button
                             className="btn"
                             type="button"
-                            onClick={() => createNewEvent()}
+                            onClick={() => editEvent()}
                             style={{
                                 marginRight: "0px",
                                 marginLeft: "30px",

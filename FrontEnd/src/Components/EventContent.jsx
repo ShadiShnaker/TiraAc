@@ -13,6 +13,7 @@ export default function EventContent(props) {
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
     const [imgURL, setImgURL] = useState("");
+    const [eventId, setEventId] = useState("");
 
     useEffect(() => {
       const urlSearchParams = new URLSearchParams(window.location.search);
@@ -25,10 +26,13 @@ export default function EventContent(props) {
           setName(res.data.name);
           setDate(res.data.date);
           setDescription(res.data.description);
+          setEventId(urlSearchParams.get("eventId"));
+          console.log("this is event id:")
+          console.log(urlSearchParams.get("eventId"))
           var binaryData = [];
           binaryData.push(Buffer.from(res.data.img.data))
           setImgURL(URL.createObjectURL(new Blob(binaryData, {type: res.data.img.contentType})))
-        }catch(err) {console.log(err)}
+        } catch(err) {alert("Coudn't load the event content!")}
           console.log("hello im component did mount 2!");
       }
       
@@ -60,7 +64,7 @@ export default function EventContent(props) {
             return(
                 <div >
         <Link
-          to="editEvent"
+          to={"/editEvent?eventId=" + eventId}
           role="button"
           className="btn"
           style={{

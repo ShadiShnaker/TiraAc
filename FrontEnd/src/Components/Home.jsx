@@ -54,13 +54,10 @@ export default function Home(props) {
                                     Academics
                                 </span>
                             </h2>
-                            <p className="mb-3" style={{ fontSize: "18px" }}>
-                                description about our organization...
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                                <br />
+                            <p className="mb-3" style={{ fontSize: "18px", direction: "rtl" }}>
+                            עמותת האקדמיים של טירה הוקמה ביוזמת סטודנטים מטירה שהתאחדו למען העלאת המודעות החברתית בעיר והעלאת מספר האקדמיים בעיר.
+הקמת אירועים חברתיים ותרבותיים, כנסים, ימי הכשרה, ימי התנדבות בעיר, הסעות וליווי למבחן הפסיכומטרי, ליווי בוגרי תיכון לימים פתוחים באוניברסיטאות וכו.
+
                             </p>
                             <div className="mx-auto intro-button">
                                 <a
