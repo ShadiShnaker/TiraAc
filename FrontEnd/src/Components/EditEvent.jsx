@@ -20,52 +20,59 @@ export default function EditEvent(props) {
 
     const onUploadFileClick = () => {
         // `current` points to the mounted file input element
-       inputFile.current.click();
+        inputFile.current.click();
     };
 
     const uploadPicture = async (event) => {
         console.log("this is the picture: " + event.target.files[0].name);
-        setImgToUpload(event.target.files[0])
-        var url = URL.createObjectURL(event.target.files[0])
+        setImgToUpload(event.target.files[0]);
+        var url = URL.createObjectURL(event.target.files[0]);
         var img = event.target.files[0];
         img.src = url;
         setImg(img);
-    }
+    };
 
     const openImage = () => {
         window.open(img.src);
-    }
+    };
 
     useEffect(() => {
         async function fetchEventContentData() {
             try {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-            setEventId(urlSearchParams.get("eventId"));
-            console.log("hello im component did mount 1!");
-            const res = await axios.get("http://localhost:9000/event/eventContent", {
-                params: { eventId: urlSearchParams.get("eventId") },
-            });
-            setName(res.data.name);
-            setDate(res.data.date);
-            setCoordinator(res.data.coordinator);
-            setSummary(res.data.summary);
-            setDescription(res.data.description);
-           
-            var image = new Image();
-            var binaryData = [];
-            binaryData.push(Buffer.from(res.data.img.data))
-            var blob = new Blob(binaryData, {type: res.data.img.contentType});
-            image.src = URL.createObjectURL(blob)
-            image.name = image.src
-            //setImgURL(URL.createObjectURL(image))
-            setImg(image);
-            setImgToUpload("not set");
-            console.log("hello im component did mount 2!");
+                const urlSearchParams = new URLSearchParams(
+                    window.location.search
+                );
+                setEventId(urlSearchParams.get("eventId"));
+                console.log("hello im component did mount 1!");
+                const res = await axios.get(
+                    "http://localhost:9000/event/eventContent",
+                    {
+                        params: { eventId: urlSearchParams.get("eventId") },
+                    }
+                );
+                setName(res.data.name);
+                setDate(res.data.date);
+                setCoordinator(res.data.coordinator);
+                setSummary(res.data.summary);
+                setDescription(res.data.description);
+
+                var image = new Image();
+                var binaryData = [];
+                binaryData.push(Buffer.from(res.data.img.data));
+                var blob = new Blob(binaryData, {
+                    type: res.data.img.contentType,
+                });
+                image.src = URL.createObjectURL(blob);
+                image.name = image.src;
+                //setImgURL(URL.createObjectURL(image))
+                setImg(image);
+                setImgToUpload("not set");
+                console.log("hello im component did mount 2!");
             } catch (err) {
-                alert("Couldn't load event data!")
+                alert("Couldn't load event data!");
             }
         }
-  
+
         fetchEventContentData();
     }, []);
 
@@ -103,7 +110,7 @@ export default function EditEvent(props) {
                 formData.append("name", name);
                 formData.append("coordinator", coordinator);
                 formData.append("summary", summary);
-                formData.append("description",description);
+                formData.append("description", description);
                 formData.append("date", date);
                 formData.append("_id", eventId);
 
@@ -112,35 +119,34 @@ export default function EditEvent(props) {
                     formData,
                     {
                         headers: {
-                        'Content-Type': 'multipart/form-data',
-                         Authorization: localStorage.getItem("token")
-
-                        }
+                            "Content-Type": "multipart/form-data",
+                            Authorization: localStorage.getItem("token"),
+                        },
                     }
                 );
                 console.log("this is immediately after editing event");
                 window.location.replace("/events");
-                console.log("this is slightly after editing event")
-            }
-            else {
-              alert( "One of the inputed fields is empty!" );
+                console.log("this is slightly after editing event");
+            } else {
+                alert("One of the inputed fields is empty!");
             }
         } catch (error) {
-            alert("Could not update the event!")
+            alert("Could not update the event!");
         }
     };
 
     return (
         <div
-        style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%"
-        }}>
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
+        >
             <MainNavBar
-            active={"/member"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/member"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <section
                 className="contact-clean"
@@ -192,7 +198,14 @@ export default function EditEvent(props) {
                                 color: "rgb(80, 94, 108)",
                             }}
                         />
-                        <input type='file' id='file' accept="image/*" onChange={(event) => uploadPicture(event)} ref={inputFile} style={{display: 'none'}}/>
+                        <input
+                            type="file"
+                            id="file"
+                            accept="image/*"
+                            onChange={(event) => uploadPicture(event)}
+                            ref={inputFile}
+                            style={{ display: "none" }}
+                        />
                     </div>
                     <div className="mb-3">
                         <textarea
@@ -215,7 +228,14 @@ export default function EditEvent(props) {
                             defaultValue={""}
                             value={description}
                         />
-                        <h5 style={{ marginTop: "10px", color: "white" }}> Image file name: <a href="#" onClick={() => openImage()}> {img !== null ? img.name : "empty"} </a></h5>
+                        <h5 style={{ marginTop: "10px", color: "white" }}>
+                            {" "}
+                            Image file name:{" "}
+                            <a href="#" onClick={() => openImage()}>
+                                {" "}
+                                {img !== null ? img.name : "empty"}{" "}
+                            </a>
+                        </h5>
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
                         <button

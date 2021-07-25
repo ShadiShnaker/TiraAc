@@ -4,14 +4,14 @@ import "../Styles/Form-Clean.css";
 import MemberItem from "../Components/MemberItem";
 import SubNavBar from "./SubNavBar";
 import MainNavBar from "./MainNavBar";
-import "../App"
+import "../App";
 const axios = require("axios").default;
 
 const config = {
     headers: {
-      "Access-Control-Allow-Origin": 'http://localhost:3000',
-      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-    }
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
 };
 
 export default function Members(props) {
@@ -30,18 +30,21 @@ export default function Members(props) {
     useEffect(() => {
         async function fetchMembers() {
             console.log("hello im component did mount 1!");
-            let membersArr = []
-            let token = localStorage.getItem( 'token' );
-            const res = await axios.get("http://localhost:9000/users/allMembers", {
-                params: { },
-                headers: {
-                    Authorization: token
+            let membersArr = [];
+            let token = localStorage.getItem("token");
+            const res = await axios.get(
+                "http://localhost:9000/users/allMembers",
+                {
+                    params: {},
+                    headers: {
+                        Authorization: token,
+                    },
                 }
-            });
+            );
             setMembers(res.data.allMembers);
             console.log("this is meetings: " + typeof membersArr);
         }
-  
+
         fetchMembers();
     }, []);
 
@@ -79,42 +82,41 @@ export default function Members(props) {
                 password !== "" &&
                 date !== ""
             ) {
-                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (re.test(email)) {
-                const res = await axios.post(
-                    "http://localhost:9000/users/createMember",
-                    {
-                        name: name,
-                        id: id,
-                        phone: phone,
-                        email: email,
-                        password: password,
-                        date: date,
-                        memberType: memberType
-                    }, 
-                    {
-                        headers: {
-                            Authorization: localStorage.getItem("token")
+                    const res = await axios.post(
+                        "http://localhost:9000/users/createMember",
+                        {
+                            name: name,
+                            id: id,
+                            phone: phone,
+                            email: email,
+                            password: password,
+                            date: date,
+                            memberType: memberType,
+                        },
+                        {
+                            headers: {
+                                Authorization: localStorage.getItem("token"),
+                            },
                         }
-                    });
+                    );
                     alert(res.data);
                     window.location.reload();
                 } else {
-                    alert( "You must use a valid email!" );
+                    alert("You must use a valid email!");
                 }
-            }
-            else {
-              alert( "One or more of the input fields are empty!" );
+            } else {
+                alert("One or more of the input fields are empty!");
             }
         } catch (err) {
-            if (err.response.data.message){
+            if (err.response.data.message) {
                 alert(err.response.data.message.replace("name", "Email"));
             } else {
                 alert("Member creation failed!");
             }
         }
     };
-
 
     const getAddMember = () => {
         if (isAddMemberOpen) {
@@ -188,7 +190,9 @@ export default function Members(props) {
                                 type="password"
                                 name="Event Coordinator"
                                 placeholder="Initial Password"
-                                onChange={(event) => handleChangePassword(event)}
+                                onChange={(event) =>
+                                    handleChangePassword(event)
+                                }
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -231,13 +235,25 @@ export default function Members(props) {
                                         paddingLeft: "5px",
                                     }}
                                 >
-                                   {getMemberType()}{" "}
+                                    {getMemberType()}{" "}
                                 </button>
                                 <div className="dropdown-menu">
-                                    <a className="dropdown-item" onClick={() => changeMemberType("volunteer")} href="#">
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={() =>
+                                            changeMemberType("volunteer")
+                                        }
+                                        href="#"
+                                    >
                                         Volunteer
                                     </a>
-                                    <a className="dropdown-item" onClick={() => changeMemberType("manager")} href="#">
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={() =>
+                                            changeMemberType("manager")
+                                        }
+                                        href="#"
+                                    >
                                         Manager
                                     </a>
                                 </div>
@@ -268,12 +284,12 @@ export default function Members(props) {
     };
 
     const getMemberType = () => {
-        if (memberType === "volunteer"){
+        if (memberType === "volunteer") {
             return "Volunteer";
         } else {
             return "Manager";
         }
-    }
+    };
 
     const getButtonTitle = () => {
         if (isAddMemberOpen) {
@@ -283,26 +299,27 @@ export default function Members(props) {
         }
     };
 
-    const changeMemberType = (type) =>{
+    const changeMemberType = (type) => {
         setMemberType(type);
-    }
+    };
 
     return (
-        <div style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%",
-        }}
+        <div
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
         >
             <MainNavBar
-            active={"/member"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/member"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <SubNavBar
-            active={"/members"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/members"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <section
                 className="d-md-flex d-xl-flex flex-column align-items-md-center justify-content-xl-start align-items-xl-center"
@@ -330,19 +347,17 @@ export default function Members(props) {
                 {getAddMember()}
                 {members.map((x) => (
                     <MemberItem
-                    key={x._id}
-                    _id={x._id}
-                    name={x.name}
-                    phone={x.phone}
-                    email={x.email}
-                    password={x.password}
-                    date={x.date}
-                    memberType={x.memberType}
+                        key={x._id}
+                        _id={x._id}
+                        name={x.name}
+                        phone={x.phone}
+                        email={x.email}
+                        password={x.password}
+                        date={x.date}
+                        memberType={x.memberType}
                     ></MemberItem>
                 ))}
-                
             </section>
         </div>
     );
 }
-

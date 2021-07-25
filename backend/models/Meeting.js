@@ -1,25 +1,25 @@
-const mongoonse = require("mongoose")
+const mongoonse = require("mongoose");
 
 const Meeting = mongoonse.Schema({
-    name:{
+    name: {
         type: String,
-        require: true
+        require: true,
     },
 
-    coordinator:{
+    coordinator: {
         type: String,
-        require: false
+        require: false,
     },
 
-    date:{
+    date: {
         type: String,
-        require: true
+        require: true,
     },
 
     meetingType: {
         type: String,
-        require: true
-    }
-})
+        require: true,
+    },
+});
 
-module.exports = mongoonse.model('Meeting', Meeting)
+module.exports = mongoonse.model("Meeting", Meeting);

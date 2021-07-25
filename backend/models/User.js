@@ -1,39 +1,39 @@
-const mongoonse = require("mongoose")
+const mongoonse = require("mongoose");
 
 const User = mongoonse.Schema({
-    name:{
+    name: {
         type: String,
-        require: true
+        require: true,
     },
 
-    email:{
+    email: {
         type: String,
-        require: true
+        require: true,
     },
 
     id: {
         type: String,
-        require: true
+        require: true,
     },
 
-    phone:{
+    phone: {
         type: String,
-        require: true
+        require: true,
     },
 
-    date:{
+    date: {
         type: String,
-        require: true
+        require: true,
     },
 
-    memberType:{
+    memberType: {
         type: String,
-        require: true
+        require: true,
     },
-    authID:{
+    authID: {
         type: String,
-        required: true
-    }
-})
+        required: true,
+    },
+});
 
-module.exports = mongoonse.model('User', User)
+module.exports = mongoonse.model("User", User);

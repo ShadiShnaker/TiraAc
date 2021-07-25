@@ -6,7 +6,6 @@ import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
 export default function Mailing(props) {
-
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
@@ -20,27 +19,23 @@ export default function Mailing(props) {
 
     const sendMailData = async () => {
         try {
-            if (
-                title !== "" &&
-                content !== ""
-            ) {
+            if (title !== "" && content !== "") {
                 const res = await axios.post(
                     "http://localhost:9000/mail",
                     {
                         title: title,
-                        content: content
+                        content: content,
                     },
                     {
                         headers: {
-                            Authorization: localStorage.getItem("token")
-                        }
+                            Authorization: localStorage.getItem("token"),
+                        },
                     }
                 );
                 alert("Mail sent to all members!");
                 window.location.reload();
-            }
-            else {
-              alert( "One of the input fields is empty!" );
+            } else {
+                alert("One of the input fields is empty!");
             }
         } catch (error) {
             alert("Could not send the email!");
@@ -54,15 +49,15 @@ export default function Mailing(props) {
                 style={{ background: "rgba(241,247,252,0)", height: "100%" }}
             >
                 <MainNavBar
-            active={"/member"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
-            />
-            <SubNavBar
-            active={"/mailing"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
-            />
+                    active={"/member"}
+                    isLoggedIn={props.isLoggedIn}
+                    isManager={props.isManager}
+                />
+                <SubNavBar
+                    active={"/mailing"}
+                    isLoggedIn={props.isLoggedIn}
+                    isManager={props.isManager}
+                />
                 <form
                     style={{
                         marginTop: "120px",

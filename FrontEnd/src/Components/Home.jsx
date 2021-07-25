@@ -7,17 +7,17 @@ import MainNavBar from "./MainNavBar";
 
 export default function Home(props) {
     return (
-        <div 
-        style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%"
-        }}
+        <div
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
         >
             <MainNavBar
-            active={"/index"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/index"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <h1
                 className="text-center text-white d-none d-lg-block site-heading"
@@ -29,7 +29,7 @@ export default function Home(props) {
             >
                 <span
                     className="site-heading-upper mb-3"
-                    style={{ color: "rgb(47,123,211)"}}
+                    style={{ color: "rgb(47,123,211)" }}
                 >
                     Welcome to&nbsp;
                 </span>
@@ -61,10 +61,16 @@ export default function Home(props) {
                                     Academics
                                 </span>
                             </h2>
-                            <p className="mb-3" style={{ fontSize: "18px", direction: "rtl" }}>
-                            עמותת האקדמיים של טירה הוקמה ביוזמת סטודנטים מטירה שהתאחדו למען העלאת המודעות החברתית בעיר והעלאת מספר האקדמיים בעיר.
-הקמת אירועים חברתיים ותרבותיים, כנסים, ימי הכשרה, ימי התנדבות בעיר, הסעות וליווי למבחן הפסיכומטרי, ליווי בוגרי תיכון לימים פתוחים באוניברסיטאות וכו.
-
+                            <p
+                                className="mb-3"
+                                style={{ fontSize: "18px", direction: "rtl" }}
+                            >
+                                עמותת האקדמיים של טירה הוקמה ביוזמת סטודנטים
+                                מטירה שהתאחדו למען העלאת המודעות החברתית בעיר
+                                והעלאת מספר האקדמיים בעיר. הקמת אירועים חברתיים
+                                ותרבותיים, כנסים, ימי הכשרה, ימי התנדבות בעיר,
+                                הסעות וליווי למבחן הפסיכומטרי, ליווי בוגרי תיכון
+                                לימים פתוחים באוניברסיטאות וכו.
                             </p>
                             <div className="mx-auto intro-button">
                                 <Link

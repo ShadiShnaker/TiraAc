@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "../Styles/bootstrap.min.css";
 
 export default function EventItem(props) {
-
-
-    const getBlob = () =>{
+    const getBlob = () => {
         var binaryData = [];
-        binaryData.push(Buffer.from(props.img.data))
-        console.log( props.img)
-        return URL.createObjectURL(new Blob(binaryData, {type: props.img.contentType}))
-    }
+        binaryData.push(Buffer.from(props.img.data));
+        console.log(props.img);
+        return URL.createObjectURL(
+            new Blob(binaryData, { type: props.img.contentType })
+        );
+    };
 
     return (
         <section
@@ -78,12 +78,12 @@ export default function EventItem(props) {
                             {props.summary}
                         </p>
                         <div className="mx-auto intro-button">
-                          
                             <Link
                                 className="btn btn-primary d-inline-block mx-auto btn-xl"
                                 role="button"
-                                to={"/eventContent?eventId=" + props.id }
-                                target="_blank" rel="noopener noreferrer"
+                                to={"/eventContent?eventId=" + props.id}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 style={{
                                     background: "rgb(47,123,211)",
                                     borderStyle: "none",
@@ -97,7 +97,6 @@ export default function EventItem(props) {
                             >
                                 View Event Details
                             </Link>
-                            
                         </div>
                     </div>
                 </div>

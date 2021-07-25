@@ -17,16 +17,19 @@ export default function Meetings(props) {
 
     useEffect(() => {
         async function fetchMeetings() {
-          console.log("hello im component did mount 1!");
-            let meetingsArr = []
-            const res = await axios.get("http://localhost:9000/meetings/allMeetings", {
-                headers: {
-                    Authorization: localStorage.getItem("token")
+            console.log("hello im component did mount 1!");
+            let meetingsArr = [];
+            const res = await axios.get(
+                "http://localhost:9000/meetings/allMeetings",
+                {
+                    headers: {
+                        Authorization: localStorage.getItem("token"),
+                    },
                 }
-            });
+            );
             setMeetings(res.data.allMeetings);
         }
-  
+
         fetchMeetings();
     }, []);
 
@@ -44,35 +47,30 @@ export default function Meetings(props) {
 
     const createNewMeeting = async () => {
         try {
-            if (
-                name !== "" &&
-                date !== ""
-            ) {
+            if (name !== "" && date !== "") {
                 const res = await axios.post(
                     "http://localhost:9000/meetings/createMeeting",
                     {
                         name: name,
                         coordinator: coordinator,
                         date: date,
-                        meetingType: meetingType
+                        meetingType: meetingType,
                     },
                     {
                         headers: {
-                            Authorization: localStorage.getItem("token")
-                        }
+                            Authorization: localStorage.getItem("token"),
+                        },
                     }
                 );
                 alert(res.data);
                 window.location.reload();
-            }
-            else {
-              alert( "One of the inputed fields is empty!" );
+            } else {
+                alert("One of the inputed fields is empty!");
             }
         } catch (error) {
             alert("Creating a new meeting failed!");
         }
     };
-
 
     const getAddMeeting = () => {
         if (isAddMeetingOpen) {
@@ -113,7 +111,9 @@ export default function Meetings(props) {
                                 type="text"
                                 name="Event Coordinator"
                                 placeholder="Meeting Coordinator"
-                                onChange={(event) => handleChangeCoordinator(event)}
+                                onChange={(event) =>
+                                    handleChangeCoordinator(event)
+                                }
                                 style={{
                                     marginTop: "10px",
                                     color: "rgb(80, 94, 108)",
@@ -155,13 +155,27 @@ export default function Meetings(props) {
                                         paddingLeft: "5px",
                                     }}
                                 >
-                                   {getMeetingType()}{" "}
+                                    {getMeetingType()}{" "}
                                 </button>
                                 <div className="dropdown-menu">
-                                    <a className="dropdown-item" onClick={() => changeMeetingType("managers")} href="#">
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={() =>
+                                            changeMeetingType("managers")
+                                        }
+                                        href="#"
+                                    >
                                         Managers Only
                                     </a>
-                                    <a className="dropdown-item" onClick={() => changeMeetingType("managersAndVolunteers")} href="#">
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={() =>
+                                            changeMeetingType(
+                                                "managersAndVolunteers"
+                                            )
+                                        }
+                                        href="#"
+                                    >
                                         Managers + Volunteers
                                     </a>
                                 </div>
@@ -192,12 +206,12 @@ export default function Meetings(props) {
     };
 
     const getMeetingType = () => {
-        if (meetingType === "managers"){
+        if (meetingType === "managers") {
             return "Managers Only";
         } else {
             return "Managers + Volunteers";
         }
-    }
+    };
 
     const getButtonTitle = () => {
         if (isAddMeetingOpen) {
@@ -207,27 +221,27 @@ export default function Meetings(props) {
         }
     };
 
-    const changeMeetingType = (type) =>{
+    const changeMeetingType = (type) => {
         setMeetingType(type);
-    }
+    };
 
     return (
         <div
-        style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%",
-        }}
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
         >
             <MainNavBar
-            active={"/member"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/member"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <SubNavBar
-            active={"/meetings"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/meetings"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <section
                 className="d-md-flex d-xl-flex flex-column align-items-md-center justify-content-xl-start align-items-xl-center"
@@ -236,39 +250,42 @@ export default function Meetings(props) {
                     width: "100%",
                 }}
             >
-                {props.isLoggedIn && props.isManager ?
-                <button
-                    className="btn"
-                    onClick={() => changeAddMeetingVisibility()}
-                    type="button"
-                    style={{
-                        marginRight: "0px",
-                        marginLeft: "0px",
-                        background: "rgb(47,123,211)",
-                        color: "rgb(255,255,255)",
-                        width: "300px",
-                        marginBottom: "20px",
-                    }}
-                >
-                    {getButtonTitle()}
-                </button>
-                :
-                <div></div>
-                }
+                {props.isLoggedIn && props.isManager ? (
+                    <button
+                        className="btn"
+                        onClick={() => changeAddMeetingVisibility()}
+                        type="button"
+                        style={{
+                            marginRight: "0px",
+                            marginLeft: "0px",
+                            background: "rgb(47,123,211)",
+                            color: "rgb(255,255,255)",
+                            width: "300px",
+                            marginBottom: "20px",
+                        }}
+                    >
+                        {getButtonTitle()}
+                    </button>
+                ) : (
+                    <div></div>
+                )}
 
-                {props.isLoggedIn && props.isManager ? getAddMeeting() : <div></div>}
+                {props.isLoggedIn && props.isManager ? (
+                    getAddMeeting()
+                ) : (
+                    <div></div>
+                )}
                 {meetings.map((x) => (
                     <MeetingItem
-                    key={x._id}
-                    id={x._id}
-                    name={x.name}
-                    date={x.date}
-                    meetingType={x.meetingType}
-                    isLoggedIn={props.isLoggedIn}
-                    isManager={props.isManager}
+                        key={x._id}
+                        id={x._id}
+                        name={x.name}
+                        date={x.date}
+                        meetingType={x.meetingType}
+                        isLoggedIn={props.isLoggedIn}
+                        isManager={props.isManager}
                     ></MeetingItem>
                 ))}
-                
             </section>
         </div>
     );

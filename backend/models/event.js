@@ -1,14 +1,14 @@
-const mongoonse = require("mongoose")
+const mongoonse = require("mongoose");
 
 const event = mongoonse.Schema({
-    name:{
+    name: {
         type: String,
-        require: true
+        require: true,
     },
 
     coordinator: {
         type: String,
-        require: true
+        require: true,
     },
 
     date: {
@@ -23,13 +23,13 @@ const event = mongoonse.Schema({
 
     description: {
         type: String,
-        require: true
+        require: true,
     },
 
     img: {
         data: Buffer,
-        contentType: String
-    }
-})
+        contentType: String,
+    },
+});
 
-module.exports = mongoonse.model('event', event)
+module.exports = mongoonse.model("event", event);

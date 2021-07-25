@@ -8,27 +8,31 @@ var cors = require("cors");
 var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
 var meetingsRouter = require("./routes/meetings");
-var mailRouter = require("./routes/mailing")
+var mailRouter = require("./routes/mailing");
 var eventRouter = require("./routes/event");
-const mongoonse = require("mongoose")
+const mongoonse = require("mongoose");
 var http = require("http");
 var app = express();
 var server = http.createServer(app);
-const env = require("dotenv/config")
+const env = require("dotenv/config");
 
-const corsOptions ={
-  origin:'*',
-  optionSuccessStatus:200
-}
+const corsOptions = {
+    origin: "*",
+    optionSuccessStatus: 200,
+};
 
-server.listen('9000', () => {
-  console.log('server is running')
-})
+server.listen("9000", () => {
+    console.log("server is running");
+});
 
-mongoonse.connect(process.env.DB,{useNewUrlParser: true, useUnifiedTopology: true} ,(err) => {
-  if(err) return console.log(err.message)
-  console.log("Connected to DB!")
-})
+mongoonse.connect(
+    process.env.DB,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (err) => {
+        if (err) return console.log(err.message);
+        console.log("Connected to DB!");
+    }
+);
 
 // view engine setup
 // app.set("views", path.join(__dirname, "views"));
@@ -52,8 +56,6 @@ app.use("/event", eventRouter);
 //   next(createError(404));
 // });
 
-
-
 // error handler
 // app.use(function (err, req, res, next) {
 //   // set locals, only providing error in development
@@ -64,7 +66,6 @@ app.use("/event", eventRouter);
 //   res.status(err.status || 500);
 //   res.render("error");
 // });
-
 
 // app.use(async function (req, res, next) {
 

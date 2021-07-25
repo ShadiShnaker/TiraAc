@@ -1,50 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "../Styles/bootstrap.min.css";
 import EventItem from "../Components/EventItem";
 import SubNavBar from "./SubNavBar";
 import MainNavBar from "./MainNavBar";
 const axios = require("axios").default;
 
-export default function Events(props){
-    const [events, setEvents] = useState([])
-
+export default function Events(props) {
+    const [events, setEvents] = useState([]);
 
     useEffect(() => {
         async function fetchevents() {
-          console.log("hello im component did mount 1!");
-            let eventsarr = []
-            const res = await axios.get("http://localhost:9000/event/allEvents");
+            console.log("hello im component did mount 1!");
+            let eventsarr = [];
+            const res = await axios.get(
+                "http://localhost:9000/event/allEvents"
+            );
             setEvents(res.data.allEvents);
         }
-        
+
         fetchevents();
     }, []);
 
-
-    return(
+    return (
         <div
-        style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%",
-        }}
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
         >
             <MainNavBar
-            active={"/events"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/events"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             {events.map((x) => (
-                    <EventItem
+                <EventItem
                     key={x._id}
                     id={x._id}
                     name={x.name}
                     date={x.date}
                     summary={x.summary}
                     description={x.description}
-                    img = {x.img}
-                    ></EventItem>
-                ))}
+                    img={x.img}
+                ></EventItem>
+            ))}
         </div>
-    )
+    );
 }

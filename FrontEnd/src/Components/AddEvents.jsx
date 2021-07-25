@@ -12,25 +12,25 @@ export default function AddEvents(props) {
     const [summary, setSummary] = useState("");
     const [description, setDescription] = useState("");
 
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState(null);
 
     const inputFile = useRef(null);
 
     const openImage = () => {
         window.open(image.src);
-    }
+    };
 
     const onUploadFileClick = () => {
         // `current` points to the mounted file input element
-       inputFile.current.click();
+        inputFile.current.click();
     };
 
     const uploadPicture = async (event) => {
         console.log("this is the picture: " + event.target.files[0].name);
-        var tempImage = event.target.files[0]
+        var tempImage = event.target.files[0];
         tempImage.src = URL.createObjectURL(tempImage);
-        setImage(tempImage)
-    }
+        setImage(tempImage);
+    };
 
     const handleChangeName = (event) => {
         setName(event.target.value);
@@ -66,7 +66,7 @@ export default function AddEvents(props) {
                 formData.append("name", name);
                 formData.append("coordinator", coordinator);
                 formData.append("summary", summary);
-                formData.append("description",description);
+                formData.append("description", description);
                 formData.append("date", date);
 
                 const res = await axios.post(
@@ -74,38 +74,38 @@ export default function AddEvents(props) {
                     formData,
                     {
                         headers: {
-                        'Content-Type': 'multipart/form-data',
-                         Authorization: localStorage.getItem("token")
-
-                        }
+                            "Content-Type": "multipart/form-data",
+                            Authorization: localStorage.getItem("token"),
+                        },
                     }
                 );
                 alert("Event created successfully!");
                 window.location.reload();
+            } else {
+                alert("One or more of the input fields are empty!");
             }
-            else {
-              alert( "One or more of the input fields are empty!" );
-            }
-        } catch (error) {alert("Couldn't create the event!")}
+        } catch (error) {
+            alert("Couldn't create the event!");
+        }
     };
 
     return (
         <div
-        style={{
-            overflowX: "hidden",
-            overflowY: "auto",
-            height: "100%",
-        }}
+            style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "100%",
+            }}
         >
             <MainNavBar
-            active={"/member"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/member"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <SubNavBar
-            active={"/addEvent"}
-            isLoggedIn={props.isLoggedIn}
-            isManager={props.isManager}
+                active={"/addEvent"}
+                isLoggedIn={props.isLoggedIn}
+                isManager={props.isManager}
             />
             <section
                 className="contact-clean"
@@ -155,7 +155,14 @@ export default function AddEvents(props) {
                                 color: "rgb(80, 94, 108)",
                             }}
                         />
-                        <input type='file' id='file' accept="image/*" onChange={(event) => uploadPicture(event)} ref={inputFile} style={{display: 'none'}}/>
+                        <input
+                            type="file"
+                            id="file"
+                            accept="image/*"
+                            onChange={(event) => uploadPicture(event)}
+                            ref={inputFile}
+                            style={{ display: "none" }}
+                        />
                     </div>
                     <div className="mb-3">
                         <textarea
@@ -177,7 +184,14 @@ export default function AddEvents(props) {
                             defaultValue={""}
                         />
 
-                        <h5 style={{ marginTop: "10px", color: "white" }}> Image file name: <a href="#" onClick={() => openImage()}> {image !== null ? image.name : ""} </a></h5>
+                        <h5 style={{ marginTop: "10px", color: "white" }}>
+                            {" "}
+                            Image file name:{" "}
+                            <a href="#" onClick={() => openImage()}>
+                                {" "}
+                                {image !== null ? image.name : ""}{" "}
+                            </a>
+                        </h5>
                     </div>
                     <div className="d-xl-flex justify-content-xl-center mb-3">
                         <button
